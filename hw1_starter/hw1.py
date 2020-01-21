@@ -194,7 +194,7 @@ def matrix_multiplication_by_loop(matrix_a, matrix_b):
 
   N = N_a
 
-  ret = np.empty((M, K))
+  ret = np.zeros((M, K))
 
   for m in range(M):
     for k in range(K):
@@ -505,10 +505,11 @@ def read_and_count_text(text_path="waugh.txt"):
     text: A string representing the contents in the text file.
     length: An integer representing the number of characters in the text file.
   """
-  text, length = None, None
+  f = open(text_path, "r")
+  text = f.read().strip()
+  f.close()
+  length = len(text)
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
   # All your changes should be above this line.
   return text, length
 
@@ -525,10 +526,8 @@ def preprocess_text(text):
   Returns:
     words: A list of string, each represents a word in the `text`.
   """
-  words = []
-
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  SEPARATOR = " "
+  words = text.replace(".", "").replace(",", "").split(SEPARATOR)
   # All your changes should be above this line.
   return words
 
@@ -547,10 +546,14 @@ def measure_word_frequency(words):
   Returns:
     None.
   """
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  freq = np.array(np.unique(words, return_counts=True)).T
+  top_five = freq[freq[:,1].argsort()[::-1][:5]]
+
+  counts_sep_by_colon = list(map(lambda wc: ":".join(wc), top_five))
+  result = ", ".join(counts_sep_by_colon)
+  print(result)
   # All your changes should be above this line.
-  return words
+  return None
 
 
 def shuffle_texts_in_file(text_path="waugh.txt",
@@ -573,8 +576,21 @@ def shuffle_texts_in_file(text_path="waugh.txt",
   Returns:
     None.
   """
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  text, length = read_and_count_text(text_path)
+  words = preprocess_text(text)
+  
+  def shuffle(word):
+    chars = list(word)
+    random.shuffle(chars)
+    return ''.join(chars)
+
+  shuffled = map(shuffle, words)
+  output = " ".join(shuffled)
+
+  f = open(saving_path, "w")
+  f.write(output)
+  f.close()
+
   # All your changes should be above this line.
   return words
 
@@ -585,12 +601,12 @@ if __name__ == "__main__":
   # Feel free to implement more test cases to test your functions more
   #   thoroughly; we have more for grading.
 
-  # matrix = generate_random_numbers()
-  # measure_time_consumptions()
-  # plot_without_loop()
+  matrix = generate_random_numbers()
+  measure_time_consumptions()
+  plot_without_loop()
   # print_one_to_ten_in_random_order_with_pauses()
 
-  # matrix_multiplication_by_loop(generate_random_numbers(20, 10), generate_random_numbers(10, 40))
+  matrix_multiplication_by_loop(generate_random_numbers(20, 10), generate_random_numbers(10, 40))
   matrix_manpulation()
   normalize_rows(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
   print("The %d-th Fibonacci number is %d" % (10, recursive_fibonacci(10)))

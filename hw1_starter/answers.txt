@@ -1,12 +1,19 @@
+2.
 add_one_by_loop time 0.9942898750305176
 add_one_without_loop time 0.0020411014556884766
 
+13.
 Darkest pixel
 Value: 0.02021098
 Row: 603
 Col: 1289
 
+16.
 Channel Means
 R_mean 0.2803492844104767
 G_mean 0.48036590218544006
 B_mean 0.5871130228042603
+
+
+19.
+the:5, I:5, of:5, world:2, have:2
