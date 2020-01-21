@@ -3,8 +3,11 @@ import random
 import time
 
 import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 import numpy as np
 import skimage.color
+
+from skimage.io import imsave, imread
 
 # You should not use any other libraries.
 
@@ -321,10 +324,12 @@ def read_image(image_path="pittsburgh.png"):
   Returns:
     ret: An np.ndarray of shape [M, N, 3] representing an image in RGB.
   """
-  ret = None
+  ret = mpimg.imread(image_path)
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  (rows, cols, rgb) = ret.shape
+  print("Dimensions of {} is {} pixels (rows) and {} pixels (cols)".format(image_path, rows, cols))
+
+  assert type(ret) is np.ndarray
   # All your changes should be above this line.
   return ret
 
@@ -342,10 +347,11 @@ def convert_image_to_grayscale(image):
     ret: An np.ndarray of shape [M, N] in grayscale of the original image.
   """
   assert len(image.shape) == 3 and image.shape[2] == 3
-  ret = image.copy()
+  
+  ret = skimage.color.rgb2gray(image)
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  assert type(ret) is np.ndarray
+
   # All your changes should be above this line.
   return ret
 
@@ -360,6 +366,7 @@ def find_darkest_pixel(grayscale_image):
   - You may find the following functions helpful:
   https://docs.scipy.org/doc/numpy/reference/generated/numpy.argmax.html
   https://docs.scipy.org/doc/numpy/reference/generated/numpy.unravel_index.html
+  - https://stackoverflow.com/questions/48135736/what-is-an-intuitive-explanation-of-np-unravel-index/48136499
 
   Args:
     grayscale_image: An np.ndarray of shape [M, N] representing an grayscale
@@ -371,10 +378,11 @@ def find_darkest_pixel(grayscale_image):
     column_index: The column_index of the darkest pixel.
   """
   assert len(grayscale_image.shape) == 2
-  value, row_index, column_index = None, None, None
+  index_for_darkest_pixel_as_flat_vector = np.argmin(grayscale_image)
+  (row_index, column_index) = np.unravel_index(index_for_darkest_pixel_as_flat_vector, grayscale_image.shape)
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  value = grayscale_image[row_index][column_index]
+
   # All your changes should be above this line.
   return value, (row_index, column_index)
 
@@ -397,10 +405,23 @@ def mask_image_around_darkest_pixel(image, patch_size=31):
   Returns:
     image: An np.ndarray of shape [M, N, 3] representing an image in RGB.
   """
-  masked_image = image.copy()
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  WHITE = 1.0
+  half_patch_length = patch_size // 2
+  # Helpful - https://towardsdatascience.com/the-little-known-ogrid-function-in-numpy-19ead3bdae40
+  grayscale_image = convert_image_to_grayscale(image)
+  (value, (darkest_row, darkest_col)) = find_darkest_pixel(grayscale_image)
+
+  M, N = grayscale_image.shape
+  x, y = np.ogrid[0:M, 0:N]
+  mask_row_0 = darkest_row - half_patch_length
+  mask_row_1 = darkest_row + half_patch_length
+  mask_col_0 = darkest_col - half_patch_length
+  mask_col_1 = darkest_col + half_patch_length
+  mask = (x <= mask_row_1) & (x >= mask_row_0) & (y <= mask_col_1) & (y >= mask_col_0)
+ 
+  masked_image = grayscale_image.copy()
+  masked_image[mask] = 1
   # All your changes should be above this line.
   return masked_image
 
@@ -415,8 +436,7 @@ def save_image(image, saving_path="masked_image.png"):
   Returns:
     None.
   """
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  imsave(saving_path, skimage.img_as_ubyte(image))
   # All your changes should be above this line.
   return None
 
@@ -442,10 +462,32 @@ def subtract_per_channel_mean(image, saving_path="mean_subtracted.png"):
   Returns:
     None.
   """
-  image_copy = image.copy()
+  RED_CHANNEL_INDEX = 0
+  GREEN_CHANNEL_INDEX = 1
+  BLUE_CHANNEL_INDEX = 2
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  red_channel = image[:,:,RED_CHANNEL_INDEX]
+  green_channel = image[:,:,GREEN_CHANNEL_INDEX]
+  blue_channel = image[:,:,BLUE_CHANNEL_INDEX]
+
+  red_mean = np.mean(red_channel)
+  green_mean = np.mean(green_channel)
+  blue_mean = np.mean(blue_channel)
+
+  print("R_mean {}, G_mean {}, B_mean {}".format(red_mean, green_mean, blue_mean))
+
+  subtracted_red = red_channel - red_mean
+  subtracted_green = green_channel - green_mean
+  subtracted_blue = blue_channel - blue_mean
+
+  subtracted_per_channel_mean_image = np.dstack((subtracted_red, subtracted_green, subtracted_blue))
+
+  normalize = lambda a: ((a - np.min(a))/(np.max(a) - np.min(a)))
+
+  normalized_subtracted_per_channel_mean_image = normalize(subtracted_per_channel_mean_image)
+
+  save_image(normalized_subtracted_per_channel_mean_image, saving_path)
+
   # All your changes should be above this line.
   return None
 
@@ -574,7 +616,7 @@ if __name__ == "__main__":
   assert np.all(np.isclose(uniq, np.unique(duped, axis=0)))
 
   image = read_image()
-  modified = mask_image_around_darkest_pixel(image)
+  modified = mask_image_around_darkest_pixel(image, patch_size=31)
   save_image(modified)
   subtract_per_channel_mean(image)
 
