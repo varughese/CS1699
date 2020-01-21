@@ -30,10 +30,7 @@ def generate_random_numbers(num_rows=1000000, num_cols=1, mean=0.0, std=5.0):
   Returns:
     ret: A np.ndarray object containing the desired random numbers.
   """
-  ret = None
-
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  ret = np.random.normal(mean, std, (num_rows, num_cols))
   # All your changes should be above this line.
   return ret
 
@@ -53,10 +50,14 @@ def add_one_by_loop(matrix):
     ret: A np.ndarray of the same shape as `matrix`, with each element being
       added by 1.
   """
+
   ret = matrix.copy()
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  (rows, cols) = matrix.shape
+  for row in range(rows):
+    for col in range(cols):
+      ret[row][col] += 1
+
   # All your changes should be above this line.
   return ret
 
@@ -70,10 +71,7 @@ def add_one_without_loop(matrix):
   Returns:
     ret: A np.ndarray of the same shape as `matrix`.
   """
-  ret = matrix.copy()
-
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  ret = matrix + 1
   # All your changes should be above this line.
   return ret
 
@@ -98,8 +96,22 @@ def measure_time_consumptions():
   Returns:
     None.
   """
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  matrix = generate_random_numbers()
+
+  start = time.time()
+  loop = add_one_by_loop(matrix)
+  end = time.time()
+
+  print("add_one_by_loop time {}".format(end - start))
+
+  start = time.time()
+  wo_loop = add_one_without_loop(matrix)
+  end = time.time()
+
+  print("add_one_without_loop time {}".format(end - start))
+
+  assert np.all(np.isclose(loop, wo_loop))
+
   # All your changes should be above this line.
   return None
 
@@ -116,8 +128,16 @@ def plot_without_loop(saving_path="exponential.png"):
   Returns:
     None.
   """
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  MAX = 30
+  STEP = 2
+  x = np.arange(0, MAX, 2)
+  y = 2 ** x
+
+
+
+  plt.plot(x, y, 'bo')
+  plt.xticks(x)
+  plt.savefig(saving_path)
   # All your changes should be above this line.
   return None
 
@@ -136,8 +156,15 @@ def print_one_to_ten_in_random_order_with_pauses():
   Returns:
     None.
   """
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  MIN = 1
+  MAX = 10
+  arr = np.arange(1, MAX + 1)
+  np.random.shuffle(arr)
+  
+  for x in np.nditer(arr):
+    print(x)
+    time.sleep(1) # Sleep 1 second
+
   # All your changes should be above this line.
   return None
 
@@ -158,13 +185,19 @@ def matrix_multiplication_by_loop(matrix_a, matrix_b):
     ret: A np.ndarray of shape [M. K] which is equivalent to the product of
       `matrix_a` by `matrix_b`.
   """
-  assert matrix_a.shape[1] == matrix_b.shape[0]
-  ret = None
+  (M, N_a) = matrix_a.shape
+  (N_b, K) = matrix_b.shape
+  assert N_a == N_b 
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
-  # All your changes should be above this line.
+  N = N_a
 
+  ret = np.empty((M, K))
+
+  for m in range(M):
+    for k in range(K):
+      for i in range(N):
+        ret[m][k] += matrix_a[m][i] * matrix_b[i][k]
+  
   # The following code is to verify that your implementation is correct.
   assert np.all(np.isclose(ret, matrix_a @ matrix_b))
 
@@ -192,12 +225,10 @@ def matrix_manpulation():
     ret: A np.ndarray matrix of shape [10, 10] containing elements from 0 to 99.
   """
   vector = np.expand_dims(np.arange(10), 1)
-  ret = None
+  x = np.broadcast_to(vector, (10, 10))
+  ret = 10 * x + x.T
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
   # All your changes should be above this line.
-
   return ret
 
 
@@ -221,10 +252,8 @@ def normalize_rows(matrix):
     ret: A np.ndarray of the same shape as `matrix`.
   """
   assert np.all(matrix >= 0) and np.all(matrix.sum(axis=1) > 0)
-  ret = matrix.copy()
+  ret = matrix / np.linalg.norm(matrix, axis=1, ord=1)[:, np.newaxis]
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
   # All your changes should be above this line.
   return ret
 
@@ -240,11 +269,13 @@ def recursive_fibonacci(n):
   Returns:
     ret: An integer representing the n-th number in Fibonacci sequence.
   """
-  assert n > 0
-  ret = None
+  if n == 0:
+    return 0
+  elif n == 1:
+    return 1
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
+  ret = recursive_fibonacci(n - 1) + recursive_fibonacci(n - 2) 
+
   # All your changes should be above this line.
   return ret
 
@@ -262,10 +293,17 @@ def my_unique(matrix):
   Returns:
     ret: A np.ndarray of shape [M', N] where M' <= M, without duplicate rows.
   """
-  ret = None
+  ret = matrix.copy()
+  rows_set = set()
+  i = 0
+  while i < ret.shape[0]:
+    tupled = tuple(ret[i])
+    if tupled in rows_set:
+      ret = np.delete(ret, (i), axis=0)
+    else:
+      rows_set.add(tupled)
+      i += 1
 
-  # Delete the following line and complete your implementation below.
-  raise NotImplementedError
   # All your changes should be above this line.
   return ret
 
@@ -505,15 +543,35 @@ if __name__ == "__main__":
   # Feel free to implement more test cases to test your functions more
   #   thoroughly; we have more for grading.
 
-  matrix = generate_random_numbers()
-  measure_time_consumptions()
-  plot_without_loop()
-  print_one_to_ten_in_random_order_with_pauses()
+  # matrix = generate_random_numbers()
+  # measure_time_consumptions()
+  # plot_without_loop()
+  # print_one_to_ten_in_random_order_with_pauses()
+
+  # matrix_multiplication_by_loop(generate_random_numbers(20, 10), generate_random_numbers(10, 40))
   matrix_manpulation()
   normalize_rows(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
   print("The %d-th Fibonacci number is %d" % (10, recursive_fibonacci(10)))
 
-  my_unique(matrix)
+  duped = np.array([
+    [0,9,9,9,0],
+    [0,9,9,9,0],
+    [1,2,3,4,5],
+    [2,5,4,3,3],
+    [3,5,5,5,5],
+    [1,2,3,4,5],
+    [0,9,9,9,0],
+    [4,5,4,3,3],
+    [4,5,4,3,3],
+    [4,5,4,3,3],
+    [4,5,4,3,3],
+    [5,5,5,5,5],
+    [5,5,5,5,5],
+    [0,9,9,9,0],
+  ])
+
+  uniq = my_unique(duped)
+  assert np.all(np.isclose(uniq, np.unique(duped, axis=0)))
 
   image = read_image()
   modified = mask_image_around_darkest_pixel(image)
