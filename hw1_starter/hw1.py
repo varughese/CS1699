@@ -7,8 +7,6 @@ import matplotlib.image as mpimg
 import numpy as np
 import skimage.color
 
-from skimage.io import imsave, imread
-
 # You should not use any other libraries.
 
 
@@ -327,7 +325,7 @@ def read_image(image_path="pittsburgh.png"):
   Returns:
     ret: An np.ndarray of shape [M, N, 3] representing an image in RGB.
   """
-  ret = mpimg.imread(image_path)
+  ret = plt.imread(image_path)
 
   (rows, cols, rgb) = ret.shape
   print("Dimensions of {} is {} pixels (rows) and {} pixels (cols)".format(image_path, rows, cols))
