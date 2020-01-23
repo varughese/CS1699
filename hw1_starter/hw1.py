@@ -164,9 +164,12 @@ def print_one_to_ten_in_random_order_with_pauses():
   arr = np.arange(1, MAX + 1)
   np.random.shuffle(arr)
   
+  pause = False
   for x in np.nditer(arr):
     print(x)
-    time.sleep(1) # Sleep 1 second
+    if pause:
+      time.sleep(1) # Sleep 1 second
+    pause = not pause
 
   # All your changes should be above this line.
   return None
@@ -420,8 +423,8 @@ def mask_image_around_darkest_pixel(image, patch_size=31):
   mask_col_1 = darkest_col + half_patch_length
   mask = (x <= mask_row_1) & (x >= mask_row_0) & (y <= mask_col_1) & (y >= mask_col_0)
  
-  masked_image = grayscale_image.copy()
-  masked_image[mask] = 1
+  masked_image = image.copy()
+  masked_image[mask] = WHITE
   # All your changes should be above this line.
   return masked_image
 
@@ -436,7 +439,7 @@ def save_image(image, saving_path="masked_image.png"):
   Returns:
     None.
   """
-  imsave(saving_path, skimage.img_as_ubyte(image))
+  plt.imsave(saving_path, image)
   # All your changes should be above this line.
   return None
 
@@ -506,7 +509,7 @@ def read_and_count_text(text_path="waugh.txt"):
     length: An integer representing the number of characters in the text file.
   """
   f = open(text_path, "r")
-  text = f.read().strip()
+  text = f.read()
   f.close()
   length = len(text)
 
@@ -527,7 +530,7 @@ def preprocess_text(text):
     words: A list of string, each represents a word in the `text`.
   """
   SEPARATOR = " "
-  words = text.replace(".", "").replace(",", "").split(SEPARATOR)
+  words = text.strip().replace(".", "").replace(",", "").lower().split(SEPARATOR)
   # All your changes should be above this line.
   return words
 
@@ -604,7 +607,7 @@ if __name__ == "__main__":
   matrix = generate_random_numbers()
   measure_time_consumptions()
   plot_without_loop()
-  # print_one_to_ten_in_random_order_with_pauses()
+  print_one_to_ten_in_random_order_with_pauses()
 
   matrix_multiplication_by_loop(generate_random_numbers(20, 10), generate_random_numbers(10, 40))
   matrix_manpulation()
@@ -637,6 +640,7 @@ if __name__ == "__main__":
   subtract_per_channel_mean(image)
 
   text, length = read_and_count_text()
+  print("Length: {}".format(length))
   words = preprocess_text(text)
   measure_word_frequency(words)
   shuffle_texts_in_file()

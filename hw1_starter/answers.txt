@@ -2,6 +2,9 @@
 add_one_by_loop time 0.9942898750305176
 add_one_without_loop time 0.0020411014556884766
 
+11.
+Dimensions of pittsburgh.png is 750 pixels (rows) and 1500 pixels (cols)
+
 13.
 Darkest pixel
 Value: 0.02021098
