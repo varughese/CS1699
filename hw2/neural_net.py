@@ -2,6 +2,7 @@
 # MAV120
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 # We will follow the example in Bishop Ch. 5 that uses 
 # 	a single hidden layer, 
@@ -72,51 +73,86 @@ def backward(X, y, M, iters, eta):
 	(N, D) = X.shape
 
 	# Initialize weights to be random values
-	W1 = np.random.normal(0.0, 1.0, (M, N))
-	W2 = np.random.normal(0.0, 1.0, (M, 1))
+	W1 = np.random.normal(0.0, 0.01, (M, D))
+	W2 = np.random.normal(0.0, 0.01, (1, M))
+
 	for i in range(iters):
-		for n in range(N):
-			(y_pred, Z) = forward(X, W1, W2)
-			error_over_time[i] = 0.5 * (y_pred[n] - y[n]) ** 2
-			# delta_k is matrix of backpropagation error for the output node. Since the activation
-			# is the identity function, the formula for this is
-			# delta_k = y_k - y_true
-			delta_k = y_pred[n] - y[n]
-			hidden_layer_activations = Z[n]
-			# delta_j is a matrix of backpropagation error for the hidden layers. The activation 
-			# function is tanh. d/dx tanh(x) = 1 - (tanh(x))^2
-			# Z contains the activations of the functions after passed through tanh. So, we
-			# know 1 - (tanh(x))^2 = 1 - Z^2, since Z = tanh(x).
-			# So, we can called this derivative 'derived_h', since the Bishop book
-			# refers to this value as h'(a).
-			derived_h = compute_derivatives_from_activations(hidden_layer_activations)
-			# delta_j = derived_h * sum_k w_kj * delta_k
-			# Since there is only one output node, k=1, so this can be simplified to 
-			# delta_j = derived_h * w_0j * delta_k
-			# So, delta_j will be a 1 x M matrix that contains the error for each 
-			# hidden neuron. The m'th item in this matrix will correspond to the
-			# delta_j for that neuron. (Using delta_j since that is the formula in the 
-			# Bishop book).
-			delta_j = derived_h * W2 * delta_k
-			# From the Bishop book, 
-			# w_kj = w_kj - eta * delta_k * z_j
-			# We calculate the change in this by multiply each activation 
-			# by delta_k.
-			W2_Delta = hidden_layer_activations * delta_k * eta;
-			# w_ji = w_ji - eta * delta_j * x_i
-			# X[n] is is of shape 1 x D
-			# delta_j is of size 1 x M 
-			# We want to create the weight deltas for the whole matrix
-			# to be of size M x D. 
-			# We broadcast the matrices to make element-wise multiplication
-			# of X[n] and delta_j easier
-			W1_Delta = np.broadcast_to(X[n], (M, D)) * np.broadcast_to(delta_j.T, (M, D))
-			W1 -= W1_Delta
-			W2 -= W2_Delta
-	return (W1, W1, error_over_time)
+		n = np.random.randint(0, N)
+		(y_pred, Z) = forward(X, W1, W2)
+		error_over_time[i] = 0.5 * (y_pred[n] - y[n]) ** 2
+		# delta_k is matrix of backpropagation error for the output node. Since the activation
+		# is the identity function, the formula for this is
+		# delta_k = y_k - y_true
+		delta_k = y_pred[n] - y[n]
+		hidden_layer_activations = Z[n]
+		# delta_j is a matrix of backpropagation error for the hidden layers. The activation 
+		# function is tanh. d/dx tanh(x) = 1 - (tanh(x))^2
+		# Z contains the activations of the functions after passed through tanh. So, we
+		# know 1 - (tanh(x))^2 = 1 - Z^2, since Z = tanh(x).
+		# So, we can called this derivative 'derived_h', since the Bishop book
+		# refers to this value as h'(a).
+		derived_h = compute_derivatives_from_activations(hidden_layer_activations)
+		# delta_j = derived_h * sum_k w_kj * delta_k
+		# Since there is only one output node, k=1, so this can be simplified to 
+		# delta_j = derived_h * w_0j * delta_k
+		# So, delta_j will be a 1 x M matrix that contains the error for each 
+		# hidden neuron. The m'th item in this matrix will correspond to the
+		# delta_j for that neuron. (Using delta_j since that is the formula in the 
+		# Bishop book).
+		delta_j = derived_h * W2 * delta_k
+		# From the Bishop book, 
+		# w_kj = w_kj - eta * delta_k * z_j
+		# We calculate the change in this by multiply each activation 
+		# by delta_k.
+		W2_Delta = hidden_layer_activations * delta_k * eta;
+		# w_ji = w_ji - eta * delta_j * x_i
+		# X[n] is is of shape 1 x D
+		# delta_j is of size 1 x M 
+		# We want to create the weight deltas for the whole matrix
+		# to be of size M x D. 
+		# We broadcast the matrices to make element-wise multiplication
+		# of X[n] and delta_j easier
+		W1_Delta = np.broadcast_to(X[n], (M, D)) * np.broadcast_to(delta_j.T, (M, D))
+		W1 -= W1_Delta
+		W2 -= W2_Delta
+		print("epoch {} error {}".format(i, error_over_time[i]))
+	return (W1, W2, error_over_time)
 
 
 def load_data(filename):
-	np.genfromtxt(filename, delimiter=';')[1:]
+	raw_data = np.genfromtxt(filename, delimiter=';', dtype=np.float64)[1:]
+	# np.random.shuffle(raw_data)
+	(size, headers) = raw_data.shape
+	raw_training_set = raw_data[:size//2]
+	raw_validation_set = raw_data[size//2:]
+	training_set_means = np.mean(raw_training_set, axis=0)
+	training_set_std = np.std(raw_training_set, axis=0)
+	training_set = (raw_training_set - training_set_means)/(training_set_std)
+	validation_set = (raw_validation_set - training_set_means)/(training_set_std)
+	# Add 1 to the features for bias, before the output column
+	training_set = np.insert(training_set, -1, 1, axis=1)
+	validation_set = np.insert(validation_set, -1, 1, axis=1)
+	return (training_set, validation_set)
 
-load_data('winequality-red.csv')
+def split_features_and_output(data):
+	num_features = data.shape[1]
+	return (data[:,:num_features-1], data[:,-1])
+
+def train_network(training_set, learning_rate):
+	(features, y_ground_truth) = split_features_and_output(training_set)
+	hidden_neurons = 30
+	iterations = 1000
+	return backward(features, y_ground_truth, hidden_neurons, iterations, learning_rate)
+
+def calculate_error(y_test_pred, y_test):
+	return np.sqrt(((y_test_pred - y_test)**2).mean())
+
+(training_set, validation_set) = load_data('winequality-red.csv')
+(W1, W2, error_over_time) = train_network(training_set, 0.0003)
+
+(validation_features, y_test) = split_features_and_output(validation_set)
+(y_test_pred, z) = forward(validation_features, W1, W2)
+print("Error: {}".format(calculate_error(y_test_pred, y_test)))
+
+plt.plot(np.arange(error_over_time.shape[0]), error_over_time)
+plt.show()
