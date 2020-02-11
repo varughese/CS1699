@@ -73,8 +73,8 @@ def backward(X, y, M, iters, eta):
 	(N, D) = X.shape
 
 	# Initialize weights to be random values
-	W1 = np.random.normal(0.0, 0.15, (M, D))
-	W2 = np.random.normal(0.0, 0.15, (1, M))
+	W1 = np.random.normal(0.0, 0.01, (M, D))
+	W2 = np.random.normal(0.0, 0.05, (1, M))
 
 	for i in range(iters):
 		n = np.random.randint(0, N)
@@ -115,7 +115,7 @@ def backward(X, y, M, iters, eta):
 		# We broadcast the matrices to make element-wise multiplication
 		# of X[n] and delta_j possible, and to have the deltas in the same
 		# shape as the weight matrix
-		W1_Delta = np.broadcast_to(X[n], (M, D)) * np.broadcast_to(delta_j.T, (M, D))
+		W1_Delta = np.broadcast_to(X[n], (M, D)) * np.broadcast_to(delta_j.T, (M, D)) * eta
 		W1 -= W1_Delta
 		W2 -= W2_Delta
 		# Uncomment below to show iteration as program is running
@@ -138,7 +138,7 @@ def load_and_normalize_data(filename):
 	# We standardize the data sets by using the training set mean and std
 	training_set = (raw_training_set - training_set_means)/(training_set_std)
 	validation_set = (raw_validation_set - training_set_means)/(training_set_std)
-	# Add 1 to the features to act as a bias, before the output column
+	# Add 1 to the features to act as a bias
 	training_set = np.insert(training_set, num_of_features, 1, axis=1)
 	validation_set = np.insert(validation_set, num_of_features, 1, axis=1)
 	return (training_set, training_ground_truth, validation_set, validation_ground_truth)
