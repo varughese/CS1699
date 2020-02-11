@@ -73,8 +73,8 @@ def backward(X, y, M, iters, eta):
 	(N, D) = X.shape
 
 	# Initialize weights to be random values
-	W1 = np.random.normal(0.0, 0.01, (M, D))
-	W2 = np.random.normal(0.0, 0.05, (1, M))
+	W1 = np.random.normal(0.0, 0.001, (M, D))
+	W2 = np.random.normal(0.0, 0.001, (1, M))
 
 	for i in range(iters):
 		n = np.random.randint(0, N)
@@ -97,10 +97,10 @@ def backward(X, y, M, iters, eta):
 		# delta_j = derived_h * sum_k w_kj * delta_k
 		# Since there is only one output node, k=1, so this can be simplified to 
 		# delta_j = derived_h * w_0j * delta_k
-		# So, delta_j will be a 1 x M matrix that contains the error for each 
-		# hidden neuron. The m'th item in this matrix will correspond to the
-		# delta_j for that neuron. (Using the name delta_j since that is the 
-		# formula in the Bishop book).
+		# So, delta_j will be a 1 x M matrix that contains the error with respect
+		# to the activation for each hidden neuron. The m'th item in this 
+		# matrix will correspond to the delta_j for that neuron. 
+		# (Using the name delta_j since that is the formula in the Bishop book).
 		delta_j = derived_h * W2 * delta_k
 		# From the Bishop book, 
 		# w_kj = w_kj - eta * delta_k * z_j
@@ -118,7 +118,7 @@ def backward(X, y, M, iters, eta):
 		W1_Delta = np.broadcast_to(X[n], (M, D)) * np.broadcast_to(delta_j.T, (M, D)) * eta
 		W1 -= W1_Delta
 		W2 -= W2_Delta
-		# Uncomment below to show iteration as program is running
+		# Uncomment below to show each iteration error as program is running
 		# print("Iteration {} Error {}".format(i, error_over_time[i]))
 	return (W1, W2, error_over_time)
 
@@ -164,7 +164,7 @@ def plot(error_over_time):
 	plt.show()
 
 
-LEARNING_RATE = 0.005
+LEARNING_RATE = 0.03
 (training_set, training_y_ground_truth, validation_features, y_test) = load_and_normalize_data('winequality-red.csv')
 (W1, W2, error_over_time) = train_network(training_set, training_y_ground_truth, LEARNING_RATE)
 
