@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 def activation_fn(weights_times_input):
 	return np.tanh(weights_times_input)
 
-# This gets applied to activations, which already had the
+# This gets applied to neurons, which already had the
 # the activation function applied to it
 def compute_derivatives_from_activations(activations):
 	# This is the derivative of tanh: 1 - (tanh x)^2
@@ -73,20 +73,22 @@ def backward(X, y, M, iters, eta):
 	(N, D) = X.shape
 
 	# Initialize weights to be random values
-	W1 = np.random.normal(0.0, 0.01, (M, D))
-	W2 = np.random.normal(0.0, 0.01, (1, M))
+	W1 = np.random.normal(0.0, 0.15, (M, D))
+	W2 = np.random.normal(0.0, 0.15, (1, M))
 
 	for i in range(iters):
 		n = np.random.randint(0, N)
 		(y_pred, Z) = forward(X, W1, W2)
-		error_over_time[i] = 0.5 * (y_pred[n] - y[n]) ** 2
-		# delta_k is matrix of backpropagation error for the output node. Since the activation
-		# is the identity function, the formula for this is
+		error_over_time[i] = calculate_error(y_pred, y)
+		# delta_k is a matrix of backpropagation error for the output node. 
+		# I write delta_k to match the formulas in the Bishop book
+		# Since the activation for the output is the identity function, 
+		# the formula for this simplifies to:
 		# delta_k = y_k - y_true
 		delta_k = y_pred[n] - y[n]
 		hidden_layer_activations = Z[n]
-		# delta_j is a matrix of backpropagation error for the hidden layers. The activation 
-		# function is tanh. d/dx tanh(x) = 1 - (tanh(x))^2
+		# delta_j is a matrix of backpropagation error for the hidden layers. 
+		# The activation function is tanh. d/dx tanh(x) = 1 - (tanh(x))^2
 		# Z contains the activations of the functions after passed through tanh. So, we
 		# know 1 - (tanh(x))^2 = 1 - Z^2, since Z = tanh(x).
 		# So, we can called this derivative 'derived_h', since the Bishop book
@@ -97,8 +99,8 @@ def backward(X, y, M, iters, eta):
 		# delta_j = derived_h * w_0j * delta_k
 		# So, delta_j will be a 1 x M matrix that contains the error for each 
 		# hidden neuron. The m'th item in this matrix will correspond to the
-		# delta_j for that neuron. (Using delta_j since that is the formula in the 
-		# Bishop book).
+		# delta_j for that neuron. (Using the name delta_j since that is the 
+		# formula in the Bishop book).
 		delta_j = derived_h * W2 * delta_k
 		# From the Bishop book, 
 		# w_kj = w_kj - eta * delta_k * z_j
@@ -111,48 +113,62 @@ def backward(X, y, M, iters, eta):
 		# We want to create the weight deltas for the whole matrix
 		# to be of size M x D. 
 		# We broadcast the matrices to make element-wise multiplication
-		# of X[n] and delta_j easier
+		# of X[n] and delta_j possible, and to have the deltas in the same
+		# shape as the weight matrix
 		W1_Delta = np.broadcast_to(X[n], (M, D)) * np.broadcast_to(delta_j.T, (M, D))
 		W1 -= W1_Delta
 		W2 -= W2_Delta
-		print("epoch {} error {}".format(i, error_over_time[i]))
+		# Uncomment below to show iteration as program is running
+		# print("Iteration {} Error {}".format(i, error_over_time[i]))
 	return (W1, W2, error_over_time)
 
 
-def load_data(filename):
+def load_and_normalize_data(filename):
+	# We remove the header from the daa
 	raw_data = np.genfromtxt(filename, delimiter=';', dtype=np.float64)[1:]
-	# np.random.shuffle(raw_data)
+	# Uncomment to shuffle data before splitting - np.random.shuffle(raw_data)
 	(size, headers) = raw_data.shape
-	raw_training_set = raw_data[:size//2]
-	raw_validation_set = raw_data[size//2:]
+	# We split the data in half, training and validation
+	(raw_training_set, training_ground_truth) = split_features_and_output(raw_data[:size//2])
+	(raw_validation_set, validation_ground_truth) = split_features_and_output(raw_data[size//2:])
+	num_of_features = headers - 1 
+	# We find the mean and std for the training set
 	training_set_means = np.mean(raw_training_set, axis=0)
 	training_set_std = np.std(raw_training_set, axis=0)
+	# We standardize the data sets by using the training set mean and std
 	training_set = (raw_training_set - training_set_means)/(training_set_std)
 	validation_set = (raw_validation_set - training_set_means)/(training_set_std)
-	# Add 1 to the features for bias, before the output column
-	training_set = np.insert(training_set, -1, 1, axis=1)
-	validation_set = np.insert(validation_set, -1, 1, axis=1)
-	return (training_set, validation_set)
+	# Add 1 to the features to act as a bias, before the output column
+	training_set = np.insert(training_set, num_of_features, 1, axis=1)
+	validation_set = np.insert(validation_set, num_of_features, 1, axis=1)
+	return (training_set, training_ground_truth, validation_set, validation_ground_truth)
 
 def split_features_and_output(data):
 	num_features = data.shape[1]
 	return (data[:,:num_features-1], data[:,-1])
 
-def train_network(training_set, learning_rate):
-	(features, y_ground_truth) = split_features_and_output(training_set)
+def train_network(training_set, y_ground_truth, learning_rate):
 	hidden_neurons = 30
 	iterations = 1000
-	return backward(features, y_ground_truth, hidden_neurons, iterations, learning_rate)
+	return backward(training_set, y_ground_truth, hidden_neurons, iterations, learning_rate)
 
 def calculate_error(y_test_pred, y_test):
 	return np.sqrt(((y_test_pred - y_test)**2).mean())
 
-(training_set, validation_set) = load_data('winequality-red.csv')
-(W1, W2, error_over_time) = train_network(training_set, 0.0003)
 
-(validation_features, y_test) = split_features_and_output(validation_set)
+def plot(error_over_time):
+	line = plt.plot(np.arange(error_over_time.shape[0]), error_over_time, label="eta={}".format(LEARNING_RATE))
+	plt.ylim(0.5, 6.5)
+	plt.legend(loc="upper right")
+	plt.savefig('learning_rate_plots/error_over_time_eta_' + str(LEARNING_RATE) + '.png')
+	plt.show()
+
+
+LEARNING_RATE = 0.005
+(training_set, training_y_ground_truth, validation_features, y_test) = load_and_normalize_data('winequality-red.csv')
+(W1, W2, error_over_time) = train_network(training_set, training_y_ground_truth, LEARNING_RATE)
+
 (y_test_pred, z) = forward(validation_features, W1, W2)
-print("Error: {}".format(calculate_error(y_test_pred, y_test)))
 
-plt.plot(np.arange(error_over_time.shape[0]), error_over_time)
-plt.show()
+print("RMS Error on Validation Set = {}".format(calculate_error(y_test_pred, y_test)))
+plot(error_over_time)
