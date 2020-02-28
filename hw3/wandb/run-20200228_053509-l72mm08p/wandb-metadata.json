@@ -1,0 +1,24 @@
+{
+    "root": "/Users/matv/Documents/School/CS 1699",
+    "program": "hw3.py",
+    "git": {
+        "remote": "git@github.com:varughese/CS1699.git",
+        "commit": "c0090f4dc2858a30f3c70d647c1f4779aac98666"
+    },
+    "email": "mat.varughese3@gmail.com",
+    "codePath": "hw3/hw3.py",
+    "startedAt": "2020-02-28T05:35:09.951661",
+    "host": "varughese",
+    "username": "matv",
+    "executable": "/usr/local/bin/python3",
+    "os": "Darwin-18.0.0-x86_64-i386-64bit",
+    "python": "3.7.0",
+    "cpu_count": 4,
+    "args": [],
+    "state": "finished",
+    "jobType": null,
+    "mode": "run",
+    "project": "cs1699-hw3",
+    "heartbeatAt": "2020-02-28T05:39:44.132002",
+    "exitcode": 0
+}

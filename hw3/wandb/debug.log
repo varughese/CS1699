@@ -1,0 +1,425 @@
+2020-02-28 00:35:10,403 DEBUG   MainThread:11425 [wandb_config.py:_load_defaults():119] no defaults not found in config-defaults.yaml
+2020-02-28 00:35:10,410 DEBUG   MainThread:11425 [meta.py:setup():97] code probe starting
+2020-02-28 00:35:10,411 DEBUG   MainThread:11425 [meta.py:_setup_code_git():49] probe for git information
+2020-02-28 00:35:10,413 DEBUG   MainThread:11425 [cmd.py:execute():719] Popen(['git', 'cat-file', '--batch-check'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=<valid stream>)
+2020-02-28 00:35:10,435 DEBUG   MainThread:11425 [cmd.py:execute():719] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+2020-02-28 00:35:10,442 DEBUG   MainThread:11425 [meta.py:_setup_code_program():58] save program starting
+2020-02-28 00:35:10,443 DEBUG   MainThread:11425 [meta.py:_setup_code_program():60] save program starting: /Users/matv/Documents/School/CS 1699/hw3/hw3.py
+2020-02-28 00:35:10,443 DEBUG   MainThread:11425 [meta.py:_setup_code_program():65] save program saved: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/code/hw3/hw3.py
+2020-02-28 00:35:10,443 DEBUG   MainThread:11425 [meta.py:_setup_code_program():67] save program
+2020-02-28 00:35:10,444 DEBUG   MainThread:11425 [meta.py:setup():119] code probe done
+2020-02-28 00:35:10,467 DEBUG   MainThread:11425 [run_manager.py:__init__():541] Initialized sync for cs1699-hw3/l72mm08p
+2020-02-28 00:35:10,475 INFO    MainThread:11425 [run_manager.py:wrap_existing_process():1144] wrapping existing process 11417
+2020-02-28 00:35:10,476 WARNING MainThread:11425 [io_wrap.py:register():104] SIGWINCH handler was not None: <Handlers.SIG_DFL: 0>
+2020-02-28 00:35:10,480 DEBUG   MainThread:11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): pypi.org:443
+2020-02-28 00:35:10,560 DEBUG   MainThread:11425 [connectionpool.py:_make_request():393] https://pypi.org:443 "GET /pypi/wandb/json HTTP/1.1" 200 41454
+2020-02-28 00:35:10,591 INFO    MainThread:11425 [run_manager.py:init_run():924] system metrics and metadata threads started
+2020-02-28 00:35:10,591 INFO    MainThread:11425 [run_manager.py:init_run():963] upserting run before process can begin, waiting at most 10 seconds
+2020-02-28 00:35:10,606 DEBUG   Thread-14 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:35:10,857 DEBUG   Thread-14 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:35:10,866 INFO    Thread-14 :11425 [run_manager.py:_upsert_run():1048] saving patches
+2020-02-28 00:35:10,866 DEBUG   Thread-14 :11425 [cmd.py:execute():719] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+2020-02-28 00:35:10,874 DEBUG   Thread-14 :11425 [cmd.py:execute():719] Popen(['git', 'diff', '--cached', '--abbrev=40', '--full-index', '--raw'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+2020-02-28 00:35:10,888 DEBUG   Thread-14 :11425 [cmd.py:execute():719] Popen(['git', 'diff', '--abbrev=40', '--full-index', '--raw'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+2020-02-28 00:35:10,900 DEBUG   Thread-14 :11425 [cmd.py:execute():719] Popen(['git', 'merge-base', 'HEAD', 'c0090f4dc2858a30f3c70d647c1f4779aac98666'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+2020-02-28 00:35:10,910 INFO    Thread-14 :11425 [run_manager.py:_upsert_run():1052] saving pip packages
+2020-02-28 00:35:10,911 INFO    Thread-14 :11425 [run_manager.py:_upsert_run():1054] initializing streaming files api
+2020-02-28 00:35:10,912 INFO    Thread-14 :11425 [run_manager.py:_upsert_run():1061] unblocking file change observer, beginning sync with W&B servers
+2020-02-28 00:35:10,913 INFO    MainThread:11425 [run_manager.py:wrap_existing_process():1161] informing user process we are ready to proceed
+2020-02-28 00:35:10,917 INFO    MainThread:11425 [run_manager.py:_sync_etc():1268] entering loop for messages from user process
+2020-02-28 00:35:10,919 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:35:11,022 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:35:11,414 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/config.yaml
+2020-02-28 00:35:11,433 DEBUG   Thread-3  :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:35:11,607 DEBUG   Thread-3  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:35:11,614 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/requirements.txt
+2020-02-28 00:35:11,614 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:11,615 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:35:11,615 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/code/hw3/hw3.py
+2020-02-28 00:35:11,615 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/code
+2020-02-28 00:35:11,615 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/code/hw3
+2020-02-28 00:35:12,412 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-summary.json
+2020-02-28 00:35:12,413 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/media/graph/graph_0_summary_4fa440e3.graph.json
+2020-02-28 00:35:12,413 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/media
+2020-02-28 00:35:12,413 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/media/graph
+2020-02-28 00:35:13,252 DEBUG   Thread-7  :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:35:13,372 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:13,419 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:13,419 DEBUG   Thread-16 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:35:13,530 DEBUG   Thread-16 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:35:13,540 DEBUG   Thread-16 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): storage.googleapis.com:443
+2020-02-28 00:35:13,890 DEBUG   Thread-16 :11425 [connectionpool.py:_make_request():393] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/matv/cs1699-hw3/l72mm08p/___batch_archive_1.tgz?Expires=1582868173&GoogleAccessId=gorilla-cloud-storage%40wandb-production.iam.gserviceaccount.com&Signature=PXhaPKHufBueK8JBshGl0%2BCe5Q8dpTHlv4xCmLxK8DmWHOiVwext1cJ%2B%2B%2F%2FV3KktJeQlp%2Fn%2FRv4K0cQHkoqpu3jSUqZjQttAamRt795SQfRZRr%2FRv%2Fzc5A0dOrMIJV3LbsWjzAo6Bv%2BNjFQ94nQ1YXz39ww2EvBo%2BCB07Vh9NWwHBNkd8WGz1u2dIVReWQHgxA0mAaIruww9hbycZ%2Fk4YwAjf0DLbTv2R9%2Fg24dBCWEgEJMgAl6Dm%2F0dhtOCM0H46eVUYpLqEBWaKoSIDnOdYbOc7pfDgdzyCFVZAbAqAFe7Vdjzcn%2FwnHEoOWrc456KrJDd7J5cK64NrZ31XpSp9Q%3D%3D HTTP/1.1" 200 0
+2020-02-28 00:35:14,419 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:15,424 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:16,173 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:16,424 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:17,425 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:18,428 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:18,904 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:19,430 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:20,431 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:21,370 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:21,432 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:23,436 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:24,285 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:24,437 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:26,029 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:35:26,114 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:35:26,442 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:26,800 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:27,443 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:27,443 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:35:28,447 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:29,326 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:29,448 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:30,449 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:31,454 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:32,227 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:32,454 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:33,455 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:34,442 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:34,456 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:35,457 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:36,460 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:37,398 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:37,464 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:38,468 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:39,469 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:39,470 INFO    Thread-3  :11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:35:39,517 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:40,470 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:41,122 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:35:41,216 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:35:41,472 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:42,240 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:42,473 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:43,477 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:43,477 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:35:44,479 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:45,367 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:45,480 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:46,481 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:47,422 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:47,482 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:48,482 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:49,487 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:49,504 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:51,494 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:51,844 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:52,496 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:53,496 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:53,877 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:54,497 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:55,498 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:56,223 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:35:56,500 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:57,236 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:35:57,501 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:57,707 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:35:58,504 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:59,505 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:35:59,505 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:36:00,113 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:36:00,509 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:01,510 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:02,425 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:36:02,513 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:03,515 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:04,517 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:05,166 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:36:05,518 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:06,520 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:07,522 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:07,677 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:36:08,525 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:09,528 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:09,528 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:36:10,529 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:11,531 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:12,244 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:36:12,349 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:36:13,534 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:14,535 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:15,536 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:15,536 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:36:16,541 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:17,543 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:18,481 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:36:18,543 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:19,544 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:20,545 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:21,546 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:22,547 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:23,548 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:24,550 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:25,557 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:26,558 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:27,359 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:36:27,441 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:36:27,559 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:28,560 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:28,904 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:36:29,565 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:30,569 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:31,575 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:31,575 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:36:33,581 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:34,582 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:36,586 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:37,587 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:38,592 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:39,559 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:36:39,593 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:40,597 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:36:41,599 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:42,450 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:36:42,543 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:36:42,604 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:43,605 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:45,607 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:46,609 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:47,609 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:47,610 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:36:48,611 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:49,612 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:50,577 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:36:50,613 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:51,614 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:52,615 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:54,621 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:55,623 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:56,624 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:57,550 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:36:57,626 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:36:57,639 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:36:59,629 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:00,630 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:01,440 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:37:01,631 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:02,632 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:03,633 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:37:04,634 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:05,639 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:06,643 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:07,644 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:08,645 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:09,648 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:10,649 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:10,650 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:37:11,925 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:37:12,648 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:37:12,651 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:12,737 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:37:13,655 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:14,658 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:15,659 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:16,660 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:17,661 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:18,664 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:19,667 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:19,667 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:37:20,673 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:21,675 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:22,049 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:37:22,676 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:23,676 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:24,677 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:25,678 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:26,679 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:27,680 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:27,745 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:37:27,867 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:37:28,683 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:29,684 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:30,685 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:31,686 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:32,133 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:37:32,687 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:33,688 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:35,694 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:35,694 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:37:36,697 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:37,698 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:38,699 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:39,701 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:40,702 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:40,702 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:37:41,704 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:42,704 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:42,722 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:37:42,874 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:37:42,962 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:37:44,712 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:45,715 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:46,716 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:47,717 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:48,718 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:49,722 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:50,723 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:51,728 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:51,728 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:37:52,730 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:53,435 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:37:53,731 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:54,732 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:55,734 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:56,735 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:57,736 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:57,969 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:37:58,054 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:37:58,736 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:37:59,738 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:00,744 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:01,747 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:02,750 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:03,481 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:38:03,752 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:04,757 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:05,762 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:06,767 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:07,769 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:07,770 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:38:08,770 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:09,772 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:10,776 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:11,782 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:11,786 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:38:12,783 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:13,062 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:38:13,151 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:38:13,784 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:14,405 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:38:14,786 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:15,787 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:16,792 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:17,794 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:18,796 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:19,797 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:20,798 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:21,799 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:22,800 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:23,801 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:23,801 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:38:24,802 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:25,417 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:38:25,808 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:26,809 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:27,810 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:28,161 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:38:28,254 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:38:28,812 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:29,813 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:30,814 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:31,820 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:32,821 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:33,822 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:34,824 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:35,399 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:38:35,825 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:36,826 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:37,827 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:38,828 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:39,833 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:39,833 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:38:40,836 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:41,838 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:41,838 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:38:42,839 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:43,260 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:38:43,346 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:38:43,840 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:44,845 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:45,846 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:46,311 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:38:46,847 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:47,851 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:48,852 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:49,858 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:50,858 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:51,861 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:52,866 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:53,868 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:54,869 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:55,871 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:55,871 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:38:56,872 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:57,188 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:38:57,873 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:58,352 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:38:58,447 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:38:58,879 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:38:59,880 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:00,882 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:01,883 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:02,884 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:03,886 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:04,889 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:05,891 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:06,896 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:07,897 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:08,164 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:39:08,897 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:09,898 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:10,899 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:11,900 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:11,901 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:39:11,901 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:39:12,901 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:13,453 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:39:13,540 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:39:13,903 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:14,907 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:15,913 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:16,914 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:17,915 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:18,919 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:19,093 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:39:19,921 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:20,922 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:21,925 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:22,926 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:23,929 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:24,931 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:25,932 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:26,937 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:39:27,939 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:28,550 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:39:28,649 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:39:28,940 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:29,527 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:39:29,941 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:30,946 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:32,950 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:33,954 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:34,955 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:42,867 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:39:43,126 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:39:43,126 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:39:43,579 INFO    MainThread:11425 [run_manager.py:_sync_etc():1291] received message from user process: {"exitcode": 0}
+2020-02-28 00:39:43,580 INFO    MainThread:11425 [run_manager.py:_sync_etc():1377] closing log streams and sending exitcode to W&B
+2020-02-28 00:39:43,580 INFO    MainThread:11425 [run_manager.py:shutdown():1068] shutting down system stats and metadata service
+2020-02-28 00:39:43,659 DEBUG   Thread-15 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:39:43,744 DEBUG   Thread-15 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:39:44,133 INFO    MainThread:11425 [run_manager.py:shutdown():1080] stopping streaming files and file change observer
+2020-02-28 00:39:44,134 INFO    Thread-3  :11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-summary.json
+2020-02-28 00:39:44,137 INFO    MainThread:11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-history.jsonl
+2020-02-28 00:39:44,142 INFO    MainThread:11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-events.jsonl
+2020-02-28 00:39:44,143 INFO    MainThread:11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/output.log
+2020-02-28 00:39:44,144 INFO    MainThread:11425 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/wandb-metadata.json
+2020-02-28 00:39:44,145 INFO    MainThread:11425 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200228_053509-l72mm08p/model.pt
+2020-02-28 00:39:44,167 DEBUG   MainThread:11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:39:44,333 DEBUG   MainThread:11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:39:45,152 DEBUG   Thread-19 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:39:45,262 DEBUG   Thread-20 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+2020-02-28 00:39:45,274 DEBUG   Thread-19 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:39:45,282 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:39:45,286 DEBUG   Thread-19 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): storage.googleapis.com:443
+2020-02-28 00:39:45,358 DEBUG   Thread-7  :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/l72mm08p/file_stream HTTP/1.1" 200 None
+2020-02-28 00:39:45,360 INFO    MainThread:11425 [run_manager.py:_sync_etc():1396] rendering summary
+2020-02-28 00:39:45,361 INFO    MainThread:11425 [run_manager.py:_sync_etc():1429] syncing files to cloud storage
+2020-02-28 00:39:45,371 DEBUG   Thread-20 :11425 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2020-02-28 00:39:45,379 DEBUG   Thread-20 :11425 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): storage.googleapis.com:443
+2020-02-28 00:39:45,760 DEBUG   Thread-20 :11425 [connectionpool.py:_make_request():393] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/matv/cs1699-hw3/l72mm08p/___batch_archive_2.tgz?Expires=1582868445&GoogleAccessId=gorilla-cloud-storage%40wandb-production.iam.gserviceaccount.com&Signature=EoRfnOcIOgADtbq5z6f71zzG1pHBzFr6c1la5XPA3q%2Fa2uZ%2BbJY8qNfXgiSA9oY%2BL3IOwoa1Tkal0Y8qtt9IqVWYSAxgo8tIabQZJKR16gAF6I3cBkq8JIo6FF8K9DLIq0FCKDNTmi%2BAabnSBhmSeETb21C4pHovT6913Mb7JAp4%2Fg9YblRBaglY22oD4wIH64uuQ0yIWBPuVqZWL7U3gUwCObSXc5zbIcyRKsCdyQN4fUCw385%2Fbbvp1qreNXsQaAwm2of1DpnRvfx1RALbUFdzwIacWnwyNxS%2F3oYz6Wd%2FmbU8m8Q36TrEyh6rKYwyLMNe4ywpw6bntBhmrJTjYw%3D%3D HTTP/1.1" 200 0
+2020-02-28 00:39:46,116 DEBUG   Thread-19 :11425 [connectionpool.py:_make_request():393] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/matv/cs1699-hw3/l72mm08p/model.pt?Expires=1582868445&GoogleAccessId=gorilla-cloud-storage%40wandb-production.iam.gserviceaccount.com&Signature=iCQmL7SMUEwxb%2FOKsF54M8dCA2B4WEDVXMMMyvm1o%2BqzImm8I%2FAmjGZoEUUk71GtcopUKMCuEZ8MuMN6MWvFyDdY382DS9ExwpXuNetlflo%2Bz8vi%2BLk5hBC7LqXmjkDgWyMrhaNTlMJOCt1%2Brf7Wk8k49T%2F8FoNuODFqLUrcVQg2nUOL0KcD4Ah4RARj5eea18s2h3LHTD%2BzLxQ3BRq0FpqZKT0wT5Qohmhdi8vCv43vyd0FsFx9SxSDIIGCvy4fgPTBIRARCxzi6FEsrl0EORjF01G%2BNYkV5gJ2USlmf8vPf6EJ43TXHosTJMLAmDKp37pB90%2Foa0Slo8G9e4rIuw%3D%3D HTTP/1.1" 200 0
+2020-02-28 00:39:47,139 INFO    MainThread:11425 [run_manager.py:_sync_etc():1444] syncing complete: https://app.wandb.ai/matv/cs1699-hw3/runs/l72mm08p
+2020-02-28 00:39:47,139 INFO    MainThread:11425 [l72mm08p:run_manager.py:_sync_etc():1444] syncing complete: https://app.wandb.ai/matv/cs1699-hw3/runs/l72mm08p
