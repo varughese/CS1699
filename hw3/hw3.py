@@ -83,10 +83,13 @@ def training(training_data_path, device, model, criterion, optimizer):
       loss.backward()
       optimizer.step()
       optimizer.zero_grad()
+      
+      wandb.log({'epoch': epoch, 'loss': loss.item()})
 
       if (i + 1) % 10 == 0:
         print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(epoch + 1, NUM_EPOCHS, i + 1, len(train_dataloader), loss.item()))
         
+
 def evaluation(test_data_path, device, model):
   test_dataset = CifarDataset(test_data_path)
   test_dataloader = torch.utils.data.DataLoader(test_dataset,
@@ -112,19 +115,20 @@ def evaluation(test_data_path, device, model):
 
 TRAIN_DIRECTORY_PATH = "cifar10/cifar10_train"
 TEST_DIRECTORY_PATH = "cifar10/cifar10_test"
-INPUT_SIZE = 32*32*3 # 32 x 32 RGB Images
-
-BATCH_SIZE = 100
-HIDDEN_SIZE = 500
+INPUT_SIZE = 32*32*3 # 32 x 32 x RGB Images
 NUM_CLASSES = 10
+
+BATCH_SIZE = 50
+HIDDEN_SIZE = 500
 NUM_EPOCHS = 5
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.0001
 
 device = 'cpu'
 model = MultilayerPerceptron(INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES).to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
+wandb.init(config={"epochs": NUM_EPOCHS, "batch_size": BATCH_SIZE})
 wandb.watch(model)
 
 training(TRAIN_DIRECTORY_PATH, device, model, criterion, optimizer)
