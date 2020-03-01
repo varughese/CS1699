@@ -1,0 +1,11 @@
+Epoch [1/2], Step [10/50], Loss: 54.1846
+Epoch [1/2], Step [20/50], Loss: 17.4119
+Epoch [1/2], Step [30/50], Loss: 8.8243
+Epoch [1/2], Step [40/50], Loss: 7.1255
+Epoch [1/2], Step [50/50], Loss: 5.4434
+Epoch [2/2], Step [10/50], Loss: 4.9493
+Epoch [2/2], Step [20/50], Loss: 4.7736
+Epoch [2/2], Step [30/50], Loss: 4.2035
+Epoch [2/2], Step [40/50], Loss: 4.1534
+Epoch [2/2], Step [50/50], Loss: 3.7930
+Accuracy of the network on the 10000 test images: 23.82 %

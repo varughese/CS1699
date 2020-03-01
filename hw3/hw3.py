@@ -53,7 +53,9 @@ class MultilayerPerceptron(nn.Module):
     self.fc2 = nn.Linear(hidden_size, num_classes)
   
   def forward(self, x):
+    dropout = nn.Dropout(p=0.3)
     out = self.fc1(x.reshape(-1, self.input_size))
+    out = dropout(out)
     out = self.relu(out)
     out = self.fc2(out)
     return out
@@ -118,10 +120,10 @@ TEST_DIRECTORY_PATH = "cifar10/cifar10_test"
 INPUT_SIZE = 32*32*3 # 32 x 32 x RGB Images
 NUM_CLASSES = 10
 
-BATCH_SIZE = 50
+BATCH_SIZE = 64
 HIDDEN_SIZE = 500
-NUM_EPOCHS = 5
-LEARNING_RATE = 0.0001
+NUM_EPOCHS = 20
+LEARNING_RATE = 0.001
 
 device = 'cpu'
 model = MultilayerPerceptron(INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES).to(device)
