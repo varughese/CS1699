@@ -1,0 +1,263 @@
+diff --git a/hw3/hw3.py b/hw3/hw3.py
+index a7e1780..efa2368 100644
+--- a/hw3/hw3.py
++++ b/hw3/hw3.py
+@@ -1,7 +1,9 @@
+ import torch
++import torchvision
+ import numpy as np
+ from os import path as ospath
+ from skimage import io
++import skimage.transform
+ import torch.nn as nn
+ import os
+ from pathlib import Path
+@@ -12,12 +14,13 @@ wandb.init(project="cs1699-hw3")
+ # Part 1
+ 
+ class CifarDataset(torch.utils.data.Dataset):
+-  def __init__(self, root_dir):
++  def __init__(self, root_dir, is_mobilenet_v2=False):
+     """Initializes a dataset containing images and labels."""
+     super().__init__()
+     root_dir = Path(root_dir)
+     paths_and_labels = [[str(p), self.image_path_to_number(p)] for p in root_dir.rglob("*.png")]
+     self.data = np.array(paths_and_labels)
++    self.is_mobilenet_v2 = is_mobilenet_v2
+ 
+   def image_path_to_number(self, image_path):
+     # cifar10_train/cat/cat_00840.png for example, we want to 
+@@ -43,7 +46,10 @@ class CifarDataset(torch.utils.data.Dataset):
+   def __getitem__(self, index):
+     """Returns the index-th data item of the dataset."""
+     [img_path, img_label] = self.data[index]
+-    return (io.imread(img_path), int(img_label)) 
++    img = io.imread(img_path)
++    if self.is_mobilenet_v2:
++      img = skimage.transform.resize(img, (224, 224))
++    return (img, int(img_label)) 
+ 
+ # Part 2
+ # Define our model (3-layer MLP)
+@@ -63,8 +69,8 @@ class MultilayerPerceptron(nn.Module):
+     out = self.fc2(out)
+     return out
+ 
+-def training(training_data_path, device, model, criterion, optimizer):
+-  train_dataset = CifarDataset(training_data_path)
++def training(training_data_path, device, model, criterion, optimizer, is_mobilenet_v2=False):
++  train_dataset = CifarDataset(training_data_path, is_mobilenet_v2)
+   train_dataloader = torch.utils.data.DataLoader(train_dataset,
+                                                   batch_size=BATCH_SIZE,
+                                                   shuffle=True)
+@@ -78,6 +84,7 @@ def training(training_data_path, device, model, criterion, optimizer):
+     for i, (images, labels) in enumerate(train_dataloader):  
+       # Move tensors to the configured device
+       images = images.to(device)
++      images = images.permute(0, 3, 1, 2)
+       labels = labels.to(device)
+     
+       # Forward pass
+@@ -95,8 +102,8 @@ def training(training_data_path, device, model, criterion, optimizer):
+         print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'.format(epoch + 1, NUM_EPOCHS, i + 1, len(train_dataloader), loss.item()))
+         
+ 
+-def evaluation(test_data_path, device, model):
+-  test_dataset = CifarDataset(test_data_path)
++def evaluation(test_data_path, device, model, is_mobilenet_v2=False):
++  test_dataset = CifarDataset(test_data_path, is_mobilenet_v2)
+   test_dataloader = torch.utils.data.DataLoader(test_dataset,
+                                                   batch_size=BATCH_SIZE,
+                                                   shuffle=True)
+@@ -108,6 +115,7 @@ def evaluation(test_data_path, device, model):
+     total = 0
+     for images, labels in test_dataloader:
+       images = images.to(device)
++      images = images.permute(0, 3, 1, 2)
+       labels = labels.to(device)
+       outputs = model(images.float())
+       _, predicted = torch.max(outputs.data, 1)
+@@ -123,9 +131,9 @@ TEST_DIRECTORY_PATH = "cifar10/cifar10_test"
+ INPUT_SIZE = 32*32*3 # 32 x 32 x RGB Images
+ NUM_CLASSES = 10
+ 
+-BATCH_SIZE = 100
++BATCH_SIZE = 1000
+ HIDDEN_SIZE = 500
+-NUM_EPOCHS = 3
++NUM_EPOCHS = 1
+ LEARNING_RATE = 0.00006
+ WEIGHT_DECAY = 0.5
+ 
+@@ -134,12 +142,43 @@ model = MultilayerPerceptron(INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES).to(device)
+ criterion = nn.CrossEntropyLoss()
+ optimizer = torch.optim.Adamax(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
+ 
+-wandb.init(config={"epochs": NUM_EPOCHS, "batch_size": BATCH_SIZE})
+-wandb.watch(model)
+ 
+-training(TRAIN_DIRECTORY_PATH, device, model, criterion, optimizer)
+-evaluation(TEST_DIRECTORY_PATH, device, model)
+-
+-torch.save(model.state_dict(), os.path.join(wandb.run.dir, 'model.pt'))
+-
+-#  Part 3
+\ No newline at end of file
++def run_part_two():  
++  wandb.init(config={"epochs": NUM_EPOCHS, "batch_size": BATCH_SIZE, "learning_rate": LEARNING_RATE})
++  wandb.watch(model)
++  training(TRAIN_DIRECTORY_PATH, device, model, criterion, optimizer)
++  evaluation(TEST_DIRECTORY_PATH, device, model)
++  torch.save(model.state_dict(), os.path.join(wandb.run.dir, 'model.pt'))
++
++#  Part 3
++FEATURE_EXTRACT = True
++
++def set_parameter_requires_grad(model, feature_extracting):
++  if feature_extracting:
++    for param in model.parameters():
++      param.requires_grad = False
++
++def run_part_three():
++  wandb.init(config={"epochs": NUM_EPOCHS, "batch_size": BATCH_SIZE, "learning_rate": LEARNING_RATE})
++  pre_model = torchvision.models.mobilenet_v2(pretrained=True)
++  set_parameter_requires_grad(pre_model, FEATURE_EXTRACT)
++  pre_model.classifier[1] = torch.nn.Linear(in_features = pre_model.classifier[1].in_features, out_features = NUM_CLASSES)
++  pre_model = pre_model.to(device)
++  pre_criterion = nn.CrossEntropyLoss()
++
++  params_to_update = pre_model.parameters()
++  if FEATURE_EXTRACT:
++    params_to_update = []
++    for name,param in pre_model.named_parameters():
++      if param.requires_grad:
++        params_to_update.append(param)
++
++
++  optimizer = torch.optim.SGD(params_to_update, LEARNING_RATE, momentum = 0.9)
++  wandb.watch(pre_model)
++  training(TRAIN_DIRECTORY_PATH, device, pre_model, pre_criterion, optimizer, is_mobilenet_v2=True)
++  print("Pretrained model")
++  evaluation(TEST_DIRECTORY_PATH, device, pre_model, is_mobilenet_v2=True)
++
++run_part_two()
++# run_part_three()
+\ No newline at end of file
+diff --git a/hw3/wandb/debug.log b/hw3/wandb/debug.log
+index b17077a..4f9662b 100644
+--- a/hw3/wandb/debug.log
++++ b/hw3/wandb/debug.log
+@@ -1,89 +1,24 @@
+-2020-03-01 14:23:52,313 DEBUG   MainThread:16268 [wandb_config.py:_load_defaults():119] no defaults not found in config-defaults.yaml
+-2020-03-01 14:23:52,319 DEBUG   MainThread:16268 [meta.py:setup():97] code probe starting
+-2020-03-01 14:23:52,320 DEBUG   MainThread:16268 [meta.py:_setup_code_git():49] probe for git information
+-2020-03-01 14:23:52,324 DEBUG   MainThread:16268 [cmd.py:execute():719] Popen(['git', 'cat-file', '--batch-check'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=<valid stream>)
+-2020-03-01 14:23:52,334 DEBUG   MainThread:16268 [cmd.py:execute():719] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+-2020-03-01 14:23:52,340 DEBUG   MainThread:16268 [meta.py:_setup_code_program():58] save program starting
+-2020-03-01 14:23:52,341 DEBUG   MainThread:16268 [meta.py:_setup_code_program():60] save program starting: /Users/matv/Documents/School/CS 1699/hw3/hw3.py
+-2020-03-01 14:23:52,342 DEBUG   MainThread:16268 [meta.py:_setup_code_program():65] save program saved: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/code/hw3/hw3.py
+-2020-03-01 14:23:52,342 DEBUG   MainThread:16268 [meta.py:_setup_code_program():67] save program
+-2020-03-01 14:23:52,343 DEBUG   MainThread:16268 [meta.py:setup():119] code probe done
+-2020-03-01 14:23:52,356 DEBUG   MainThread:16268 [run_manager.py:__init__():541] Initialized sync for cs1699-hw3/wojm8cbu
+-2020-03-01 14:23:52,363 INFO    MainThread:16268 [run_manager.py:wrap_existing_process():1144] wrapping existing process 16260
+-2020-03-01 14:23:52,363 WARNING MainThread:16268 [io_wrap.py:register():104] SIGWINCH handler was not None: <Handlers.SIG_DFL: 0>
+-2020-03-01 14:23:52,368 DEBUG   MainThread:16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): pypi.org:443
+-2020-03-01 14:23:52,549 DEBUG   MainThread:16268 [connectionpool.py:_make_request():393] https://pypi.org:443 "GET /pypi/wandb/json HTTP/1.1" 200 41454
+-2020-03-01 14:23:52,622 INFO    MainThread:16268 [run_manager.py:init_run():924] system metrics and metadata threads started
+-2020-03-01 14:23:52,622 INFO    MainThread:16268 [run_manager.py:init_run():963] upserting run before process can begin, waiting at most 10 seconds
+-2020-03-01 14:23:52,941 DEBUG   Thread-14 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:23:53,273 DEBUG   Thread-14 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:23:53,287 INFO    Thread-14 :16268 [run_manager.py:_upsert_run():1048] saving patches
+-2020-03-01 14:23:53,288 DEBUG   Thread-14 :16268 [cmd.py:execute():719] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+-2020-03-01 14:23:53,303 DEBUG   Thread-14 :16268 [cmd.py:execute():719] Popen(['git', 'diff', '--cached', '--abbrev=40', '--full-index', '--raw'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+-2020-03-01 14:23:53,327 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/config.yaml
+-2020-03-01 14:23:53,328 DEBUG   Thread-14 :16268 [cmd.py:execute():719] Popen(['git', 'diff', '--abbrev=40', '--full-index', '--raw'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+-2020-03-01 14:23:53,355 DEBUG   Thread-14 :16268 [cmd.py:execute():719] Popen(['git', 'version'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+-2020-03-01 14:23:53,389 DEBUG   Thread-14 :16268 [cmd.py:execute():719] Popen(['git', 'merge-base', 'HEAD', '88f28cc95df88e32c89de6d4b03afdcdf55fc8d2'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
+-2020-03-01 14:23:53,399 INFO    Thread-14 :16268 [run_manager.py:_upsert_run():1052] saving pip packages
+-2020-03-01 14:23:53,400 INFO    Thread-14 :16268 [run_manager.py:_upsert_run():1054] initializing streaming files api
+-2020-03-01 14:23:53,401 INFO    Thread-14 :16268 [run_manager.py:_upsert_run():1061] unblocking file change observer, beginning sync with W&B servers
+-2020-03-01 14:23:53,401 INFO    MainThread:16268 [run_manager.py:wrap_existing_process():1161] informing user process we are ready to proceed
+-2020-03-01 14:23:53,413 DEBUG   Thread-3  :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:23:53,413 INFO    MainThread:16268 [run_manager.py:_sync_etc():1268] entering loop for messages from user process
+-2020-03-01 14:23:53,415 DEBUG   Thread-15 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:23:53,670 DEBUG   Thread-15 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:23:53,704 DEBUG   Thread-3  :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:23:53,707 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/code/hw3/hw3.py
+-2020-03-01 14:23:53,707 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/output.log
+-2020-03-01 14:23:53,708 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/wandb-metadata.json
+-2020-03-01 14:23:53,708 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/code
+-2020-03-01 14:23:53,708 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/code/hw3
+-2020-03-01 14:23:54,326 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/config.yaml
+-2020-03-01 14:23:54,327 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/diff.patch
+-2020-03-01 14:23:54,327 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/requirements.txt
+-2020-03-01 14:23:55,328 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/wandb-history.jsonl
+-2020-03-01 14:23:55,330 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/output.log
+-2020-03-01 14:23:55,331 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/wandb-summary.json
+-2020-03-01 14:23:55,332 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/media/graph/graph_0_summary_6a63b8e9.graph.json
+-2020-03-01 14:23:55,333 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/media/graph
+-2020-03-01 14:23:55,333 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/media
+-2020-03-01 14:23:55,342 DEBUG   Thread-17 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:23:55,603 DEBUG   Thread-17 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:23:55,655 DEBUG   Thread-17 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): storage.googleapis.com:443
+-2020-03-01 14:23:55,843 DEBUG   Thread-7  :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:23:56,077 DEBUG   Thread-17 :16268 [connectionpool.py:_make_request():393] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/matv/cs1699-hw3/wojm8cbu/___batch_archive_1.tgz?Expires=1583090695&GoogleAccessId=gorilla-cloud-storage%40wandb-production.iam.gserviceaccount.com&Signature=OVVbbZ4avN9d7CBhyZDexjmbhldhaz1xN1wJ8eU6Bt9DUlzRQ32UMpyKHbfCjbX2C6xU15mMSrDREKjGtcIeBkpm5gt8DSdnM%2FB8bwzPvQhziruOSDaaJnBZSSYcYXU0DHOdLE8EGzAR5Pd4jb%2FZOyAAEVnrdrZ14%2BwLyTl5APwOzP1cCqsmiMv8pFOjCLaHBAhHfg%2BhneWA2Z9AZs4aVfHioP9Zoe1xB33CPvaGPSKyz%2FehFH0MuNlqYcjZld8vp75RuS%2F9OU%2F7jDF2dIDN5IqE6GSrTNDncXgE9J7CKGrVUlz%2FHVYRXVOisFsEjiFKYdyWVtPYE8Yq956aUic8tA%3D%3D HTTP/1.1" 200 0
+-2020-03-01 14:23:56,151 DEBUG   Thread-7  :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/wojm8cbu/file_stream HTTP/1.1" 200 None
+-2020-03-01 14:23:56,329 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/wandb-history.jsonl
+-2020-03-01 14:23:56,329 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/wandb-summary.json
+-2020-03-01 14:23:56,330 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/output.log
+-2020-03-01 14:23:57,102 INFO    MainThread:16268 [run_manager.py:_sync_etc():1324] process received interrupt signal, shutting down
+-2020-03-01 14:23:57,102 INFO    MainThread:16268 [run_manager.py:_sync_etc():1377] closing log streams and sending exitcode to W&B
+-2020-03-01 14:23:57,103 INFO    MainThread:16268 [run_manager.py:shutdown():1068] shutting down system stats and metadata service
+-2020-03-01 14:23:57,334 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/wandb-history.jsonl
+-2020-03-01 14:23:57,334 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/wandb-summary.json
+-2020-03-01 14:23:57,335 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/output.log
+-2020-03-01 14:23:57,336 INFO    Thread-3  :16268 [run_manager.py:_on_file_created():677] file/dir created: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/wandb-events.jsonl
+-2020-03-01 14:23:58,335 DEBUG   Thread-20 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:23:58,337 INFO    Thread-3  :16268 [run_manager.py:_on_file_modified():688] file/dir modified: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200301_192351-wojm8cbu/wandb-metadata.json
+-2020-03-01 14:23:58,553 DEBUG   Thread-20 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:23:58,557 DEBUG   Thread-20 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): storage.googleapis.com:443
+-2020-03-01 14:23:59,086 DEBUG   Thread-20 :16268 [connectionpool.py:_make_request():393] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/matv/cs1699-hw3/wojm8cbu/media/graph/graph_0_summary_6a63b8e9.graph.json?Expires=1583090698&GoogleAccessId=gorilla-cloud-storage%40wandb-production.iam.gserviceaccount.com&Signature=Vf8cm%2FaTtm2WUKN%2Fj9Mw2EhFQfvO6oPefGKGh6hAnhaofWF3r8hGZPfss98FBJHevfvzpd6aATs23rzPQAXAIILf4E6lhSBd%2B80rUxQ6Pt7Z2PtEM3F5i3VLni9yhGYLxdCtBY8suPVRnMvdZBPuRzsY0seniIL5s3AQdQIZHellunS4%2Fe4lpiITYOm4eB%2BXTeyb1I5b9ST4i6twngMP5dLNnaoAl6qV4UiZJhlOolDYgmf%2BjRLA9QiZCjLaAKMdehIilXZ0BO5%2FJkjVT%2B5lRoGnFrv6p1yP8NN2YcjrneTmsdXVnVuwfk5N1WxIWG6%2B0xBZ1rVZP2fQTBflliteuQ%3D%3D HTTP/1.1" 200 0
+-2020-03-01 14:23:59,597 DEBUG   Thread-7  :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/wojm8cbu/file_stream HTTP/1.1" 200 None
+-2020-03-01 14:24:08,683 DEBUG   Thread-15 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:24:08,894 DEBUG   Thread-15 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:24:23,907 DEBUG   Thread-15 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:24:24,095 DEBUG   Thread-15 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:24:24,346 DEBUG   Thread-16 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:24:24,606 DEBUG   Thread-16 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:24:25,351 DEBUG   Thread-21 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:24:25,552 DEBUG   Thread-21 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:24:25,605 DEBUG   Thread-21 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): storage.googleapis.com:443
+-2020-03-01 14:24:26,044 DEBUG   Thread-21 :16268 [connectionpool.py:_make_request():393] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/matv/cs1699-hw3/wojm8cbu/config.yaml?Expires=1583090725&GoogleAccessId=gorilla-cloud-storage%40wandb-production.iam.gserviceaccount.com&Signature=P6kwoXABgww1IWp35ivgyGXhrz6rpVjR4CKtgqkPk3uVarxuZr123j0L2O55D4QWGjzM2%2F2zhVxe4ovK%2F8WMWL%2B8KP32yUNW0aUOKGTZKv03GjXSOZivYZWnZj9BYqdxiSVJaajAYKn2KgYwkzyLYRuueZuw7n3zXazgAuX96ZFmuRlqwDHm1cgB4C3NUENsbJd2aFuj3ORwXK9sLUuhN7IK0mnmXm3Bsk41EbqLiYLFXWu4Wky00AnpQQtm%2BpMn8PK2Adh6JbOtNT4eUc6pql1yVirdjiVO03Ii9DzwhIWTeiBr8QlB3cQWggyYNWK9iz01MNEVAEePeVlTF85RGw%3D%3D HTTP/1.1" 200 0
+-2020-03-01 14:24:30,511 DEBUG   Thread-7  :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/wojm8cbu/file_stream HTTP/1.1" 200 None
+-2020-03-01 14:24:39,109 DEBUG   Thread-15 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:24:39,298 DEBUG   Thread-15 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:24:54,315 DEBUG   Thread-15 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:24:54,515 DEBUG   Thread-15 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+-2020-03-01 14:25:02,615 DEBUG   Thread-7  :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /files/matv/cs1699-hw3/wojm8cbu/file_stream HTTP/1.1" 200 None
+-2020-03-01 14:25:09,532 DEBUG   Thread-15 :16268 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
+-2020-03-01 14:25:09,783 DEBUG   Thread-15 :16268 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
++2020-03-01 23:40:40,176 DEBUG   MainThread:20846 [wandb_config.py:_load_defaults():119] no defaults not found in config-defaults.yaml
++2020-03-01 23:40:40,190 DEBUG   MainThread:20846 [meta.py:setup():97] code probe starting
++2020-03-01 23:40:40,191 DEBUG   MainThread:20846 [meta.py:_setup_code_git():49] probe for git information
++2020-03-01 23:40:40,193 DEBUG   MainThread:20846 [cmd.py:execute():719] Popen(['git', 'cat-file', '--batch-check'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=<valid stream>)
++2020-03-01 23:40:40,201 DEBUG   MainThread:20846 [cmd.py:execute():719] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
++2020-03-01 23:40:40,206 DEBUG   MainThread:20846 [meta.py:_setup_code_program():58] save program starting
++2020-03-01 23:40:40,207 DEBUG   MainThread:20846 [meta.py:_setup_code_program():60] save program starting: /Users/matv/Documents/School/CS 1699/hw3/hw3.py
++2020-03-01 23:40:40,207 DEBUG   MainThread:20846 [meta.py:_setup_code_program():65] save program saved: /Users/matv/Documents/School/CS 1699/hw3/wandb/run-20200302_044039-e5tpv3e6/code/hw3/hw3.py
++2020-03-01 23:40:40,207 DEBUG   MainThread:20846 [meta.py:_setup_code_program():67] save program
++2020-03-01 23:40:40,207 DEBUG   MainThread:20846 [meta.py:setup():119] code probe done
++2020-03-01 23:40:40,220 DEBUG   MainThread:20846 [run_manager.py:__init__():541] Initialized sync for cs1699-hw3/e5tpv3e6
++2020-03-01 23:40:40,226 INFO    MainThread:20846 [run_manager.py:wrap_existing_process():1144] wrapping existing process 20838
++2020-03-01 23:40:40,226 WARNING MainThread:20846 [io_wrap.py:register():104] SIGWINCH handler was not None: <Handlers.SIG_DFL: 0>
++2020-03-01 23:40:40,230 DEBUG   MainThread:20846 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): pypi.org:443
++2020-03-01 23:40:40,315 DEBUG   MainThread:20846 [connectionpool.py:_make_request():393] https://pypi.org:443 "GET /pypi/wandb/json HTTP/1.1" 200 41454
++2020-03-01 23:40:40,362 INFO    MainThread:20846 [run_manager.py:init_run():924] system metrics and metadata threads started
++2020-03-01 23:40:40,363 INFO    MainThread:20846 [run_manager.py:init_run():963] upserting run before process can begin, waiting at most 10 seconds
++2020-03-01 23:40:40,379 DEBUG   Thread-14 :20846 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): api.wandb.ai:443
++2020-03-01 23:40:40,533 DEBUG   Thread-14 :20846 [connectionpool.py:_make_request():393] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
++2020-03-01 23:40:40,548 INFO    Thread-14 :20846 [run_manager.py:_upsert_run():1048] saving patches
++2020-03-01 23:40:40,549 DEBUG   Thread-14 :20846 [cmd.py:execute():719] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
++2020-03-01 23:40:40,568 DEBUG   Thread-14 :20846 [cmd.py:execute():719] Popen(['git', 'diff', '--cached', '--abbrev=40', '--full-index', '--raw'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
++2020-03-01 23:40:40,587 DEBUG   Thread-14 :20846 [cmd.py:execute():719] Popen(['git', 'diff', '--abbrev=40', '--full-index', '--raw'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
++2020-03-01 23:40:40,606 DEBUG   Thread-14 :20846 [cmd.py:execute():719] Popen(['git', 'version'], cwd=/Users/matv/Documents/School/CS 1699, universal_newlines=False, shell=None, istream=None)
