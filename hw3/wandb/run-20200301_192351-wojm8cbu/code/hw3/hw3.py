@@ -9,8 +9,6 @@ import wandb
 
 wandb.init(project="cs1699-hw3")
 
-# Part 1
-
 class CifarDataset(torch.utils.data.Dataset):
   def __init__(self, root_dir):
     """Initializes a dataset containing images and labels."""
@@ -45,7 +43,6 @@ class CifarDataset(torch.utils.data.Dataset):
     [img_path, img_label] = self.data[index]
     return (io.imread(img_path), int(img_label)) 
 
-# Part 2
 # Define our model (3-layer MLP)
 class MultilayerPerceptron(nn.Module):
   def __init__(self, input_size, hidden_size, num_classes):
@@ -123,16 +120,15 @@ TEST_DIRECTORY_PATH = "cifar10/cifar10_test"
 INPUT_SIZE = 32*32*3 # 32 x 32 x RGB Images
 NUM_CLASSES = 10
 
-BATCH_SIZE = 100
+BATCH_SIZE = 50
 HIDDEN_SIZE = 500
-NUM_EPOCHS = 3
-LEARNING_RATE = 0.00006
-WEIGHT_DECAY = 0.5
+NUM_EPOCHS = 20
+LEARNING_RATE = 0.001
 
 device = 'cpu'
 model = MultilayerPerceptron(INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES).to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adamax(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
+optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
 wandb.init(config={"epochs": NUM_EPOCHS, "batch_size": BATCH_SIZE})
 wandb.watch(model)
@@ -141,5 +137,3 @@ training(TRAIN_DIRECTORY_PATH, device, model, criterion, optimizer)
 evaluation(TEST_DIRECTORY_PATH, device, model)
 
 torch.save(model.state_dict(), os.path.join(wandb.run.dir, 'model.pt'))
-
-#  Part 3
