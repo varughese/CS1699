@@ -76,7 +76,7 @@ class PACSDataset(Dataset):
     cnt = 0
 
     for root, dirs, files in os.walk(self.root_dir, topdown=True):
-      if files:
+      if files and files[0] != '.DS_Store':
         _, domain, category = root.rsplit('/', maxsplit=2)
         domain_set.add(domain)
         category_set.add(category)
@@ -107,10 +107,60 @@ class AlexNet(nn.Module):
   def __init__(self, configs):
     super().__init__()
     self.configs = configs
-    raise NotImplementedError
+    num_classes = configs['num_classes']
+    
+    self.features = nn.Sequential(
+      # 1
+      nn.Conv2d(3, 96, kernel_size=11, stride=4),
+      # 2
+      nn.ReLU(inplace=True),
+      # 3
+      nn.MaxPool2d(kernel_size=3, stride=2),
+      # 4
+      nn.Conv2d(96, 256, kernel_size=5, padding=2),
+      # 5
+      nn.ReLU(inplace=True),
+      # 6
+      nn.MaxPool2d(kernel_size=3, stride=2),
+      # 7
+      nn.Conv2d(256, 384, kernel_size=3, padding=1),
+      # 8
+      nn.ReLU(inplace=True),
+      # 9
+      nn.Conv2d(384, 384, kernel_size=3, padding=1),
+      # 10
+      nn.ReLU(inplace=True),
+      # 11
+      nn.Conv2d(384, 256, kernel_size=3, padding=1),
+      # 12
+      nn.ReLU(inplace=True),
+      # 13
+      nn.MaxPool2d(kernel_size=3, stride=2),
+    )
+    # 14
+    self.flatten = nn.Flatten()
+    self.classifier = nn.Sequential(
+      # 15
+      nn.Dropout(),
+      # 16
+      nn.Linear(9216, 4096),
+      # 17
+      nn.ReLU(inplace=True),
+      # 18
+      nn.Dropout(),
+      # 19
+      nn.Linear(4096, 4096),
+      # 20
+      nn.ReLU(inplace=True),
+      # 21
+      nn.Linear(4096, num_classes),
+    )
 
   def forward(self, x):
-    raise NotImplementedError
+    x = self.features(x)
+    x = self.flatten(x)
+    x = self.classifier(x)
+    return x
 
 
 class AlexNetLargeKernel(nn.Module):

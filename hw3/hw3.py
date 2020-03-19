@@ -62,9 +62,9 @@ class MultilayerPerceptron(nn.Module):
     self.fc2 = nn.Linear(hidden_size, num_classes)
   
   def forward(self, x):
-    dropout = nn.Dropout(p=0.3)
+    # dropout = nn.Dropout(p=0.3)
     out = self.fc1(x.reshape(-1, self.input_size))
-    out = dropout(out)
+    # out = dropout(out)
     out = self.relu(out)
     out = self.fc2(out)
     return out
@@ -180,5 +180,5 @@ def run_part_three():
   print("Pretrained model")
   evaluation(TEST_DIRECTORY_PATH, device, pre_model, is_mobilenet_v2=True)
 
-run_part_two()
-# run_part_three()
+# run_part_two()
+run_part_three()
