@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "hw3.py", line 136, in <module>
+    training(TRAIN_DIRECTORY_PATH, device, model, criterion, optimizer)
+  File "hw3.py", line 67, in training
+    shuffle=True)
+  File "/ihome/cs1699-2020s/mav120/.virtualenvs/pytorch/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 213, in __init__
+    sampler = RandomSampler(dataset)
+  File "/ihome/cs1699-2020s/mav120/.virtualenvs/pytorch/lib/python3.6/site-packages/torch/utils/data/sampler.py", line 94, in __init__
+    "value, but got num_samples={}".format(self.num_samples))
+ValueError: num_samples should be a positive integer value, but got num_samples=0

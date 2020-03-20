@@ -1,0 +1,24 @@
+{
+    "root": "/ihome/cs1699-2020s/mav120/CS1699",
+    "program": "hw3.py",
+    "git": {
+        "remote": "https://github.com/varughese/CS1699.git",
+        "commit": "88f28cc95df88e32c89de6d4b03afdcdf55fc8d2"
+    },
+    "email": null,
+    "codePath": "hw3/hw3.py",
+    "startedAt": "2020-03-01T19:22:33.347375",
+    "host": "login0.crc.pitt.edu",
+    "username": "mav120",
+    "executable": "/ihome/cs1699-2020s/mav120/.virtualenvs/pytorch/bin/python",
+    "os": "Linux-3.10.0-1062.4.1.el7.x86_64-x86_64-with-redhat-7.7-Maipo",
+    "python": "3.6.5",
+    "cpu_count": 12,
+    "args": [],
+    "state": "failed",
+    "jobType": null,
+    "mode": "run",
+    "project": "cs1699-hw3",
+    "heartbeatAt": "2020-03-01T19:22:35.090094",
+    "exitcode": 1
+}
