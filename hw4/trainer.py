@@ -114,50 +114,29 @@ class AlexNet(nn.Module):
     num_classes = configs['num_classes']
     
     self.features = nn.Sequential(
-      # 1
-      nn.Conv2d(3, 96, kernel_size=11, stride=4),
-      # 2
-      nn.ReLU(inplace=True),
-      # 3
-      nn.MaxPool2d(kernel_size=3, stride=2),
-      # 4
-      nn.Conv2d(96, 256, kernel_size=5, padding=2),
-      # 5
-      nn.ReLU(inplace=True),
-      # 6
-      nn.MaxPool2d(kernel_size=3, stride=2),
-      # 7
-      nn.Conv2d(256, 384, kernel_size=3, padding=1),
-      # 8
-      nn.ReLU(inplace=True),
-      # 9
-      nn.Conv2d(384, 384, kernel_size=3, padding=1),
-      # 10
-      nn.ReLU(inplace=True),
-      # 11
-      nn.Conv2d(384, 256, kernel_size=3, padding=1),
-      # 12
-      nn.ReLU(inplace=True),
-      # 13
-      nn.MaxPool2d(kernel_size=3, stride=2),
+      nn.Conv2d(3, 96, kernel_size=11, stride=4),       # 1
+      nn.ReLU(inplace=True),                            # 2
+      nn.MaxPool2d(kernel_size=3, stride=2),            # 3
+      nn.Conv2d(96, 256, kernel_size=5, padding=2),     # 4
+      nn.ReLU(inplace=True),                            # 5
+      nn.MaxPool2d(kernel_size=3, stride=2),            # 6
+      nn.Conv2d(256, 384, kernel_size=3, padding=1),    # 7
+      nn.ReLU(inplace=True),                            # 8
+      nn.Conv2d(384, 384, kernel_size=3, padding=1),    # 9
+      nn.ReLU(inplace=True),                            # 10
+      nn.Conv2d(384, 256, kernel_size=3, padding=1),    # 11
+      nn.ReLU(inplace=True),                            # 12
+      nn.MaxPool2d(kernel_size=3, stride=2),            # 13
     )
-    # 14
-    self.flatten = nn.Flatten()
+    self.flatten = nn.Flatten()                         # 14
     self.classifier = nn.Sequential(
-      # 15
-      nn.Dropout(),
-      # 16
-      nn.Linear(9216, 4096),
-      # 17
-      nn.ReLU(inplace=True),
-      # 18
-      nn.Dropout(),
-      # 19
-      nn.Linear(4096, 4096),
-      # 20
-      nn.ReLU(inplace=True),
-      # 21
-      nn.Linear(4096, num_classes),
+      nn.Dropout(),                                     # 15
+      nn.Linear(9216, 4096),                            # 16
+      nn.ReLU(inplace=True),                            # 17
+      nn.Dropout(),                                     # 18
+      nn.Linear(4096, 4096),                            # 19
+      nn.ReLU(inplace=True),                            # 20
+      nn.Linear(4096, num_classes),                     # 21
     )
 
   def forward(self, x):
@@ -175,44 +154,26 @@ class AlexNetLargeKernel(nn.Module):
     num_classes = configs['num_classes']
 
     self.features = nn.Sequential(
-      # 1
-      nn.Conv2d(3, 96, kernel_size=21, stride=8, padding=1),
-      # 2
-      nn.ReLU(inplace=True),
-      # 3
-      nn.Conv2d(96, 256, kernel_size=7, padding=2, stride=2),
-      # 4
-      nn.ReLU(inplace=True),
-      # 5
-      nn.Conv2d(256, 384, kernel_size=3, padding=1),
-      # 6
-      nn.ReLU(inplace=True),
-      # 7
-      nn.Conv2d(384, 384, kernel_size=3, padding=1),
-      # 8
-      nn.ReLU(inplace=True),
-      # 9
-      nn.Conv2d(384, 256, kernel_size=3, stride=2),
-      # 10
-      nn.ReLU(inplace=True)
+      nn.Conv2d(3, 96, kernel_size=21, stride=8, padding=1),       # 1
+      nn.ReLU(inplace=True),                                       # 2
+      nn.Conv2d(96, 256, kernel_size=7, padding=2, stride=2),      # 3
+      nn.ReLU(inplace=True),                                       # 4
+      nn.Conv2d(256, 384, kernel_size=3, padding=1),               # 5
+      nn.ReLU(inplace=True),                                       # 6
+      nn.Conv2d(384, 384, kernel_size=3, padding=1),               # 7
+      nn.ReLU(inplace=True),                                       # 8
+      nn.Conv2d(384, 256, kernel_size=3, stride=2),                # 9
+      nn.ReLU(inplace=True)                                        # 10
     )
-    #  11
-    self.flatten = nn.Flatten()
+    self.flatten = nn.Flatten()                                    # 11
     self.classifier = nn.Sequential(
-      # 12
-      nn.Dropout(),
-      # 13
-      nn.Linear(9216, 4096),
-      # 14
-      nn.ReLU(inplace=True),
-      # 15
-      nn.Dropout(),
-      # 16
-      nn.Linear(4096, 4096),
-      # 17
-      nn.ReLU(inplace=True),
-      # 18
-      nn.Linear(4096, num_classes)
+      nn.Dropout(),                                                # 12
+      nn.Linear(9216, 4096),                                       # 13
+      nn.ReLU(inplace=True),                                       # 14
+      nn.Dropout(),                                                # 15
+      nn.Linear(4096, 4096),                                       # 16
+      nn.ReLU(inplace=True),                                       # 17
+      nn.Linear(4096, num_classes),                                # 18
     )
 
   def forward(self, x):
@@ -227,10 +188,39 @@ class AlexNetTiny(nn.Module):
   def __init__(self, configs):
     super().__init__()
     self.configs = configs
-    raise NotImplementedError
+    num_classes = configs['num_classes']
+
+    self.features = nn.Sequential(
+      nn.Conv2d(3, 48, kernel_size=11, stride=4),       # 1
+      nn.ReLU(inplace=True),                            # 2
+      nn.MaxPool2d(kernel_size=3, stride=2),            # 3
+      nn.Conv2d(48, 128, kernel_size=5, padding=2),     # 4
+      nn.ReLU(inplace=True),                            # 5
+      nn.MaxPool2d(kernel_size=3, stride=2),            # 6
+      nn.Conv2d(128, 192, kernel_size=3, padding=1),    # 7
+      nn.ReLU(inplace=True),                            # 8
+      nn.Conv2d(192, 192, kernel_size=3, padding=1),    # 9
+      nn.ReLU(inplace=True),                            # 10
+      nn.Conv2d(192, 128, kernel_size=3, padding=1),    # 11
+      nn.ReLU(inplace=True),                            # 12
+      nn.MaxPool2d(kernel_size=3, stride=2),            # 13
+    )
+    self.flatten = nn.Flatten()                         # 14
+    self.classifier = nn.Sequential(
+      nn.Dropout(),                                     # 15
+      nn.Linear(4608, 2048),                            # 16
+      nn.ReLU(inplace=True),                            # 17
+      nn.Dropout(),                                     # 18
+      nn.Linear(2048, 1024),                            # 19
+      nn.ReLU(inplace=True),                            # 20
+      nn.Linear(1024, num_classes),                     # 21
+    )
 
   def forward(self, x):
-    raise NotImplementedError
+    x = self.features(x)
+    x = self.flatten(x)
+    x = self.classifier(x)
+    return x
 
 
 class AlexNetAvgPooling(nn.Module):
@@ -241,7 +231,10 @@ class AlexNetAvgPooling(nn.Module):
     raise NotImplementedError
 
   def forward(self, x):
-    raise NotImplementedError
+    x = self.features(x)
+    x = self.flatten(x)
+    x = self.classifier(x)
+    return x
 
 
 class AlexNetDilation(nn.Module):
@@ -252,7 +245,10 @@ class AlexNetDilation(nn.Module):
     raise NotImplementedError
 
   def forward(self, x):
-    raise NotImplementedError
+    x = self.features(x)
+    x = self.flatten(x)
+    x = self.classifier(x)
+    return x
 
 
 def visualize_kernels(kernel_name,
@@ -341,8 +337,8 @@ def model_training():
   ############################################################################
   """After implementing all required models, you can switch from here."""
   # model = AlexNet(configs).to(device)
-  model = AlexNetLargeKernel(configs).to(device)
-  # model = AlexNetTiny(configs).to(device)
+  # model = AlexNetLargeKernel(configs).to(device)
+  model = AlexNetTiny(configs).to(device)
   # model = AlexNetAvgPooling(configs).to(device)
   # model = AlexNetDilation(configs).to(device)
   ############################################################################
