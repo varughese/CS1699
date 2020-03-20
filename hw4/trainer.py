@@ -18,7 +18,7 @@ FLAGS = flags.FLAGS
 flags.DEFINE_enum('task_type', 'training', ['training', 'analysis'],
                   'Specifies the task type.')
 
-flags.DEFINE_boolean('debug', True, 'Does not load the whole dataset for quicker testing.')
+flags.DEFINE_boolean('debug', False, 'Does not load the whole dataset for quicker testing.')
 
 # Hyperparameters for Part I
 flags.DEFINE_float('learning_rate', 1e-3, 'Learning rate.')
