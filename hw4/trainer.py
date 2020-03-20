@@ -18,6 +18,8 @@ FLAGS = flags.FLAGS
 flags.DEFINE_enum('task_type', 'training', ['training', 'analysis'],
                   'Specifies the task type.')
 
+flags.DEFINE_boolean('debug', True, 'Does not load the whole dataset for quicker testing.')
+
 # Hyperparameters for Part I
 flags.DEFINE_float('learning_rate', 1e-3, 'Learning rate.')
 flags.DEFINE_float('weight_decay', 0, 'Weight decay (L2 regularization).')
@@ -80,6 +82,8 @@ class PACSDataset(Dataset):
         _, domain, category = root.rsplit('/', maxsplit=2)
         domain_set.add(domain)
         category_set.add(category)
+        if FLAGS.debug:
+          files = files[:5]
         pbar = tqdm(files)
         for name in pbar:
           pbar.set_description('Processing Folder: domain=%s, category=%s' %
@@ -168,10 +172,54 @@ class AlexNetLargeKernel(nn.Module):
   def __init__(self, configs):
     super().__init__()
     self.configs = configs
-    raise NotImplementedError
+    num_classes = configs['num_classes']
+
+    self.features = nn.Sequential(
+      # 1
+      nn.Conv2d(3, 96, kernel_size=21, stride=8, padding=1),
+      # 2
+      nn.ReLU(inplace=True),
+      # 3
+      nn.Conv2d(96, 256, kernel_size=7, padding=2, stride=2),
+      # 4
+      nn.ReLU(inplace=True),
+      # 5
+      nn.Conv2d(256, 384, kernel_size=3, padding=1),
+      # 6
+      nn.ReLU(inplace=True),
+      # 7
+      nn.Conv2d(384, 384, kernel_size=3, padding=1),
+      # 8
+      nn.ReLU(inplace=True),
+      # 9
+      nn.Conv2d(384, 256, kernel_size=3, stride=2),
+      # 10
+      nn.ReLU(inplace=True)
+    )
+    #  11
+    self.flatten = nn.Flatten()
+    self.classifier = nn.Sequential(
+      # 12
+      nn.Dropout(),
+      # 13
+      nn.Linear(9216, 4096),
+      # 14
+      nn.ReLU(inplace=True),
+      # 15
+      nn.Dropout(),
+      # 16
+      nn.Linear(4096, 4096),
+      # 17
+      nn.ReLU(inplace=True),
+      # 18
+      nn.Linear(4096, num_classes)
+    )
 
   def forward(self, x):
-    raise NotImplementedError
+    x = self.features(x)
+    x = self.flatten(x)
+    x = self.classifier(x)
+    return x
 
 
 class AlexNetTiny(nn.Module):
@@ -292,8 +340,8 @@ def model_training():
 
   ############################################################################
   """After implementing all required models, you can switch from here."""
-  model = AlexNet(configs).to(device)
-  # model = AlexNetLargeKernel(configs).to(device)
+  # model = AlexNet(configs).to(device)
+  model = AlexNetLargeKernel(configs).to(device)
   # model = AlexNetTiny(configs).to(device)
   # model = AlexNetAvgPooling(configs).to(device)
   # model = AlexNetDilation(configs).to(device)
