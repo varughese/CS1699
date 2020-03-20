@@ -228,7 +228,33 @@ class AlexNetAvgPooling(nn.Module):
   def __init__(self, configs):
     super().__init__()
     self.configs = configs
-    raise NotImplementedError
+    num_classes = configs['num_classes']
+
+    self.features = nn.Sequential(
+      nn.Conv2d(3, 96, kernel_size=11, stride=4),       # 1
+      nn.ReLU(inplace=True),                            # 2
+      nn.AvgPool2d(kernel_size=3, stride=2),            # 3
+      nn.Conv2d(96, 256, kernel_size=5, padding=2),     # 4
+      nn.ReLU(inplace=True),                            # 5
+      nn.AvgPool2d(kernel_size=3, stride=2),            # 6
+      nn.Conv2d(256, 384, kernel_size=3, padding=1),    # 7
+      nn.ReLU(inplace=True),                            # 8
+      nn.Conv2d(384, 384, kernel_size=3, padding=1),    # 9
+      nn.ReLU(inplace=True),                            # 10
+      nn.Conv2d(384, 256, kernel_size=3, padding=1),    # 11
+      nn.ReLU(inplace=True),                            # 12
+      nn.AvgPool2d(kernel_size=3, stride=2),            # 13
+    )
+    self.flatten = nn.Flatten()                         # 14
+    self.classifier = nn.Sequential(
+      nn.Dropout(),                                     # 15
+      nn.Linear(9216, 4096),                            # 16
+      nn.ReLU(inplace=True),                            # 17
+      nn.Dropout(),                                     # 18
+      nn.Linear(4096, 4096),                            # 19
+      nn.ReLU(inplace=True),                            # 20
+      nn.Linear(4096, num_classes),                     # 21
+    )
 
   def forward(self, x):
     x = self.features(x)
@@ -338,8 +364,8 @@ def model_training():
   """After implementing all required models, you can switch from here."""
   # model = AlexNet(configs).to(device)
   # model = AlexNetLargeKernel(configs).to(device)
-  model = AlexNetTiny(configs).to(device)
-  # model = AlexNetAvgPooling(configs).to(device)
+  # model = AlexNetTiny(configs).to(device)
+  model = AlexNetAvgPooling(configs).to(device)
   # model = AlexNetDilation(configs).to(device)
   ############################################################################
 
