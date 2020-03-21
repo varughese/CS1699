@@ -388,11 +388,11 @@ def model_training():
 
   ############################################################################
   """After implementing all required models, you can switch from here."""
-  # model = AlexNet(configs).to(device)
+  model = AlexNet(configs).to(device)
   # model = AlexNetLargeKernel(configs).to(device)
   # model = AlexNetTiny(configs).to(device)
   # model = AlexNetAvgPooling(configs).to(device)
-  model = AlexNetDilation(configs).to(device)
+  # model = AlexNetDilation(configs).to(device)
   ############################################################################
 
   print('Model Architecture:\n%s' % model)
