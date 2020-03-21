@@ -307,7 +307,7 @@ def visualize_kernels(kernel_name,
                       kernel_weight,
                       max_in_channels=12,
                       max_out_channels=12,
-                      saving_prefix='kernel'):
+                      saving_prefix=''):
   """A helper function to visualize the learned convolutional kernels.
   
   Args:
@@ -347,13 +347,21 @@ def visualize_kernels(kernel_name,
   plt.ylabel('First %d Out-Channels' % ncols)
 
   plt.tight_layout()
-  plt.savefig(os.path.join(saving_prefix, kernel_name.lower() + '.png'))
+  plt.savefig(os.path.join('kernel', saving_prefix, kernel_name.lower() + '.png'))
   return
 
-
 def analyze_model_kernels():
-  raise NotImplementedError
-
+  checkpoint = torch.load(FLAGS.model_checkpoint)
+  weight_name_to_layer_name = {
+    'features.0.weight': 'conv2d-1',
+    'features.3.weight': 'conv2d-4',
+    'features.6.weight': 'conv2d-7',
+    'features.8.weight': 'conv2d-9',
+    'features.10.weight': 'conv2d-11'
+  }
+  for weight_name, kernel_name in weight_name_to_layer_name.items():
+    kernel = checkpoint[weight_name]
+    visualize_kernels(kernel_name, kernel, saving_prefix=FLAGS.label_type)
 
 def model_training():
   train_dataset = PACSDataset(root_dir='pacs_dataset',
@@ -382,6 +390,7 @@ def model_training():
       FLAGS.weight_decay)
 
   os.makedirs(experiment_name, exist_ok=True)
+
   writer = SummaryWriter(log_dir=experiment_name)
 
   configs = {'num_classes': LABEL_SIZE[FLAGS.label_type]}
