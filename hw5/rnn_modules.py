@@ -3,10 +3,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+
+
+
 class GRUCell(nn.Module):
   """Implementation of GRU cell from https://arxiv.org/pdf/1406.1078.pdf."""
 
   def __init__(self, input_size, hidden_size, bias=False):
+    # https://www.youtube.com/watch?v=8HyCNIVRbSU&feature=emb_title
     super().__init__()
 
     self.input_size = input_size
@@ -76,19 +80,58 @@ class LSTMCell(nn.Module):
     self.hidden_size = hidden_size
     self.bias = bias
 
-    #####################################################################
-    # Implement here following the given signature                      #
-    raise NotImplementedError
-    #####################################################################
+    # Learnable weights and bias for `forget gate`
+    self.W_f = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    if bias:
+      self.b_f = nn.Parameter(torch.Tensor(hidden_size))
+    else:
+      self.register_parameter('b_f', None)
 
-    return
+    # Learnable weights and bias for `input gate`
+    self.W_i = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    if bias:
+      self.b_i = nn.Parameter(torch.Tensor(hidden_size))
+    else:
+      self.register_parameter('b_i', None)
+
+    # Learnable weights and bias for `output gate`
+    self.W_o = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    if bias:
+      self.b_o = nn.Parameter(torch.Tensor(hidden_size))
+    else:
+      self.register_parameter('b_o', None)
+
+    # Learnable weights and bias for `g gate`, or as colah says, C_t tilde
+    self.W_c = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    if bias:
+      self.b_c = nn.Parameter(torch.Tensor(hidden_size))
+    else:
+      self.register_parameter('b_c', None)
+
+    self.reset_parameters()
 
   def forward(self, x, prev_state):
-    #####################################################################
-    # Implement here following the given signature                      #
-    raise NotImplementedError
-    #####################################################################
-    return
+    if prev_state is None:
+      batch = x.shape[0]
+      prev_h = torch.zeros((batch, self.hidden_size), device=x.device)
+      prev_c = torch.zeros((batch, self.hidden_size), device=x.device)
+    else:
+      prev_h = prev_state[0]
+      prev_c = prev_state[1]
+
+    # We can stack prev_h and x on top of each other, and apply matrix multiplies to them
+    concat_hx = torch.cat((prev_h, x), dim=1);
+
+    # Formulas are from https://colah.github.io/posts/2015-08-Understanding-LSTMs/
+    # The only way to understand what this actually does is read that
+    f_t = torch.sigmoid(F.linear(concat_hx, self.W_f, self.b_f))
+    i_t = torch.sigmoid(F.linear(concat_hx, self.W_i, self.b_i))
+    C_tilde = torch.tanh(F.linear(concat_hx, self.W_c, self.b_c))
+    o_t = torch.sigmoid(F.linear(concat_hx, self.W_o, self.b_o))
+    
+    C = f_t * prev_c + i_t * C_tilde # next cell state
+    h = o_t * torch.tanh(C)
+    return h, C
 
   def reset_parameters(self):
     sqrt_k = (1. / self.hidden_size)**0.5
