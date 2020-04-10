@@ -3,9 +3,6 @@ import torch.nn.functional as F
 import torch
 
 
-
-
-
 class GRUCell(nn.Module):
   """Implementation of GRU cell from https://arxiv.org/pdf/1406.1078.pdf."""
 
@@ -300,3 +297,17 @@ class CoupledLSTMCell(nn.Module):
     print('Total Parameters: %d' %
           sum(p.numel() for p in self.parameters() if p.requires_grad))
     return
+
+
+RNN_MODULES = {
+    'gru': GRUCell,
+    'lstm': LSTMCell,
+    'peepholed_lstm': PeepholedLSTMCell,
+    'coupled_lstm': CoupledLSTMCell
+}
+
+if __name__ == '__main__':
+  for name, lstm in RNN_MODULES.items():
+    l = lstm(128, 100, bias=True)
+    print(name.upper())
+    l.count_parameters()
