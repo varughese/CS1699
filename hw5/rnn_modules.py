@@ -239,20 +239,51 @@ class CoupledLSTMCell(nn.Module):
     self.input_size = input_size
     self.hidden_size = hidden_size
     self.bias = bias
+    
+    self.W_f = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    if bias:
+      self.b_f = nn.Parameter(torch.Tensor(hidden_size))
+    else:
+      self.register_parameter('b_f', None)
 
-    #####################################################################
-    # Implement here following the given signature                      #
-    raise NotImplementedError
-    #####################################################################
+    # Input gate is 'coupled' to forget gate. so i = 1 - f!
 
-    return
+    self.W_o = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    if bias:
+      self.b_o = nn.Parameter(torch.Tensor(hidden_size))
+    else:
+      self.register_parameter('b_o', None)
+
+    self.W_c = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    if bias:
+      self.b_c = nn.Parameter(torch.Tensor(hidden_size))
+    else:
+      self.register_parameter('b_c', None)
+
+    self.reset_parameters()
 
   def forward(self, x, prev_state):
-    #####################################################################
-    # Implement here following the given signature                      #
-    raise NotImplementedError
-    #####################################################################
-    return
+    if prev_state is None:
+      batch = x.shape[0]
+      prev_h = torch.zeros((batch, self.hidden_size), device=x.device)
+      prev_c = torch.zeros((batch, self.hidden_size), device=x.device)
+    else:
+      prev_h = prev_state[0]
+      prev_c = prev_state[1]
+
+    # We can stack prev_h and x on top of each other, and apply matrix multiplies to them
+    concat_hx = torch.cat((prev_h, x), dim=1)
+
+    # Formulas are from https://colah.github.io/posts/2015-08-Understanding-LSTMs/
+    # The only way to understand what this actually does is read that
+    f_t = torch.sigmoid(F.linear(concat_hx, self.W_f, self.b_f))
+    i_t = 1 - f_t
+    C_tilde = torch.tanh(F.linear(concat_hx, self.W_c, self.b_c))
+    o_t = torch.sigmoid(F.linear(concat_hx, self.W_o, self.b_o))
+    
+    C = f_t * prev_c + i_t * C_tilde # next cell state
+    h = o_t * torch.tanh(C)
+    return h, C
 
   def reset_parameters(self):
     sqrt_k = (1. / self.hidden_size)**0.5
