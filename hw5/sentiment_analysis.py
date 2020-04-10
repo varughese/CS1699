@@ -23,6 +23,8 @@ flags.DEFINE_string('experiment_name', 'exp', 'Defines experiment name.')
 flags.DEFINE_string('model_checkpoint', '',
                     'Specifies the checkpont for analyzing.')
 
+flags.DEFINE_bool('bias', False, 'Bias in the model')
+
 flags.DEFINE_integer('embedding_dim', 128,
                      'Dimensionality for word embeddings.')
 flags.DEFINE_integer('hidden_size', 100, 'Dimensionality for recurrent neuron.')
@@ -138,7 +140,8 @@ def imdb_trainer():
   model = SentimentClassification(vocabulary_size=len(vocabulary),
                                   embedding_dim=FLAGS.embedding_dim,
                                   rnn_module=rnn_modules[FLAGS.rnn_module],
-                                  hidden_size=FLAGS.hidden_size)
+                                  hidden_size=FLAGS.hidden_size,
+                                  bias=FLAGS.bias)
   model.to(device)
 
   print('Model Architecture:\n%s' % model)
