@@ -231,7 +231,7 @@ def shakespeare_writer():
   start_string = FLAGS.start_string
   device = 'cpu'
 
-  state_dict = torch.load(FLAGS.model_checkpoint)
+  state_dict = torch.load(FLAGS.model_checkpoint, map_location=lambda storage, loc: storage)
   vocabulary = state_dict['vocabulary']
 
   char2index = {x: i for (i, x) in enumerate(vocabulary)}
