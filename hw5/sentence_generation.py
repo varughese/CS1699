@@ -262,7 +262,6 @@ def shakespeare_writer():
 
 
 def main(unused_argvs):
-  flags.mark_flag_as_required('experiment_name')
   if FLAGS.task_type == 'training':
     shakespeare_trainer()
   elif FLAGS.task_type == 'generation':
@@ -270,4 +269,5 @@ def main(unused_argvs):
 
 
 if __name__ == '__main__':
+  flags.mark_flag_as_required('experiment_name')
   app.run(main)
