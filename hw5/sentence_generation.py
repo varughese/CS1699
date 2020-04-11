@@ -111,27 +111,25 @@ class SentenceGeneration(nn.Module):
     data = self.embedding(history)
     batch_size, history_length, _ = data.shape
 
-    # RNNs output h's, which can be passed through a linear
-    # classifier to determine a output vector that can contain a probability
-    # for each word. Since each h determines each character, we store them
-    
-    # TODO since we use all history to predict next char dont think 
-    # we need this though ...
-    output_hs = [] 
+    cell_state = None
     
     # This loop "rolls" through the RNN. It passes each character into
     # the RNN, gets an output h, then runs the next one.
     for step in range(history_length):
-      # The RNN takes in 
+      # The RNN takes in a matrix, where each row is a different batch. 
+      # Each column will be a different word, and each one of these is like
+      # a 'step'. 
       next_state = self.rnn_model(data[:, step, :], state)
-      # if isinstance(next_state, tuple):
-      #   h, c = next_state
-      #   output_hs.append(h)
-      # else:
-      #   output_hs.append(next_state)
       state = next_state     
     
-    logits = self.classifier(state)
+    # Some LSTM's have a cell state, and a hidden state. If so, 
+    # they return a tuple.
+    if isinstance(state, tuple):
+      h, c = next_state
+    else:
+      h = state
+
+    logits = self.classifier(h)
     return logits, state
 
   def reset_parameters(self):
@@ -238,7 +236,10 @@ def shakespeare_writer():
   index2char = {i: x for (i, x) in enumerate(vocabulary)}
 
   inputs = torch.tensor([char2index[x] for x in start_string])
-  inputs = inputs.view(1, -1)
+  # view with -1 means 'infer' the shape
+  # so this would turn a vector of shape [8] to a vector of shape [1, 8]
+  # we do this because, batch_size is 1
+  inputs = inputs.view(1, -1) 
 
   model = SentenceGeneration(vocabulary_size=len(vocabulary),
                              embedding_dim=FLAGS.embedding_dim,
@@ -249,16 +250,20 @@ def shakespeare_writer():
   model.eval()
 
   generated_chars = []
-  #####################################################################
-  # Implement here for generating new sentence                        #
-  # Specifically, you need to iterate through the history and predict #
-  # next character; then you could take the predicted history as part #
-  # of history then repeat the process. The generation should be      #
-  # repeated for FLAGS.generation_length times.
-  raise NotImplementedError
-  #####################################################################
 
-  return start_string + ''.join(generated_chars)
+  print("Generating {} characters from {} \n---- \n".format(FLAGS.generation_length, FLAGS.model_checkpoint))
+  print(start_string)
+
+  while len(generated_chars) < FLAGS.generation_length:
+    logits, _ = model(inputs)
+    chosen_char = sample_next_char_id(logits)
+    inputs = torch.cat((inputs, chosen_char.view(1, -1)), 1)
+    char_ascii = index2char[chosen_char.item()]
+    print(char_ascii, end='')
+    generated_chars.append(char_ascii)
+
+  fake_shakespeare = start_string + ''.join(generated_chars)
+  return fake_shakespeare
 
 
 def main(unused_argvs):
@@ -269,5 +274,5 @@ def main(unused_argvs):
 
 
 if __name__ == '__main__':
-  flags.mark_flag_as_required('experiment_name')
+  # flags.mark_flag_as_required('experiment_name')
   app.run(main)
