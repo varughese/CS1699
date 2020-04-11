@@ -20,7 +20,7 @@ flags.DEFINE_float('learning_rate', 1e-3, 'Learning rate.')
 flags.DEFINE_float('weight_decay', 0, 'Weight decay (L2 regularization).')
 flags.DEFINE_integer('batch_size', 2048, 'Number of examples per batch.')
 flags.DEFINE_integer('epochs', 20, 'Number of epochs for training.')
-flags.DEFINE_string('experiment_name', 'exp', 'Defines experiment name.')
+flags.DEFINE_string('experiment_name', None, 'Defines experiment name.')
 flags.DEFINE_string('model_checkpoint', '',
                     'Specifies the checkpont for analyzing.')
 
@@ -262,6 +262,7 @@ def shakespeare_writer():
 
 
 def main(unused_argvs):
+  flags.mark_flag_as_required('experiment_name')
   if FLAGS.task_type == 'training':
     shakespeare_trainer()
   elif FLAGS.task_type == 'generation':
