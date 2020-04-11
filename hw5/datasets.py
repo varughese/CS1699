@@ -47,15 +47,20 @@ class IMDBReviewDataset(Dataset):
     review, label = self.data[index]
     review = ['BEGIN_TOKEN'] + review + ['END_TOKEN']
     token_ids = [self.word2index.get(w, self.oov_token_id) for w in review]
+    # returns a list of numbers (they represent words), and 1 if it is positive
     return token_ids, label
 
   def _build_vocabulary(self):
     special_tokens = ['PAD_TOKEN', 'BEGIN_TOKEN', 'OOV_TOKEN', 'END_TOKEN']
+    # OOV_TOKEN is "out of vocabulary". It replaces words that do 
+    # not fit in the vocabulary
 
     counter = collections.Counter()
     for review, _ in self.data:
       counter.update(review)
 
+    # this is just python code to see what words are most common, and
+    # then puts it in the 
     vocab = counter.most_common(self.vocab_max_size - 4)
     if self.vocab_min_count is not None:
       vocab_tokens = [w for (w, c) in vocab if c >= self.vocab_min_count]

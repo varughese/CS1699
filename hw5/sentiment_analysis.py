@@ -88,6 +88,16 @@ class SentimentClassification(nn.Module):
         full_outputs.append(next_state)
       state = next_state
 
+    # Imagine that you have five sentences in a single batch, but they are all of different lengths.
+    # Since RNN will unroll to process the inputs, and with inputs of varying lengths it will get confused. The way to solve the issue is to "pad" the inputs to make sure they are of the same length.
+    # However, when we actually process these inputs, we don't want to have the paddings to mess up; therefore we need to keep the "batch_lengths", which is a vector that remembers the length of individual instances. Then we can extract the correct output. This is exactly what this line is used for.
+
+    # The batch_lengths is returned from your data loader, because we customized the collate_fn to do that. Your dataloader actually returns three elements, (reviews, lengths, labels), as in line 159. The lengths is the "batch_lengths".
+    # PyTorch thread: https://discuss.pytorch.org/t/how-to-create-a-dataloader-with-variable-size-input/8278
+
+    # Here's some online blogs if you are interested.
+    # https://towardsdatascience.com/taming-lstms-variable-sized-mini-batches-and-why-pytorch-is-good-for-your-health-61d35642972e
+
     full_outputs = torch.stack(full_outputs, dim=1)
     outputs = full_outputs[torch.arange(batch_size), batch_lengths - 1, :]
     logits = self.classifier(outputs)

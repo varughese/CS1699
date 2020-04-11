@@ -79,8 +79,11 @@ class SentenceGeneration(nn.Module):
     self.rnn_model = self.rnn_module(input_size=embedding_dim,
                                     hidden_size=hidden_size,
                                     bias=bias)
-    # TODO - what does this output?
 
+    # RNN outputs the h, hidden vector, which we use to pick a word from
+    # our output. Then, we use apply a softmax to get a probability distribution
+    # to know which ones to pick
+    self.classifier = nn.Linear(hidden_size, vocabulary_size)
     return
 
   def forward(self, history, state=None):
@@ -93,6 +96,9 @@ class SentenceGeneration(nn.Module):
     as all zeros; otherwise when state is provided, the model should continue
     from state. This will be very useful for generating new sentences.
     
+    Logits are just the scores before the softmax is applied
+    https://miro.medium.com/max/1400/1*670CdxchunD-yAuUWdI7Bw.png
+
     Args:
       history: Iterable of character ids.
       state: Optional, the cell state for RNN. If not provided the cell state
@@ -102,13 +108,30 @@ class SentenceGeneration(nn.Module):
       logits: Predicted logits (before softmax) over vocabulary.
       state: Current state, useful for continuous inference.
     """
+    data = self.embedding(history)
+    batch_size, history_length, _ = data.shape
 
-    # Logits are just the scores before the softmax is applied
-    # PyTorch is smart enough to know how to apply the softmax afterwards
-    # https://miro.medium.com/max/1400/1*670CdxchunD-yAuUWdI7Bw.png
-
-    logits, state = None, None
-    #####################################################################
+    # RNNs output h's, which can be passed through a linear
+    # classifier to determine a output vector that can contain a probability
+    # for each word. Since each h determines each character, we store them
+    
+    # TODO since we use all history to predict next char dont think 
+    # we need this though ...
+    output_hs = [] 
+    
+    # This loop "rolls" through the RNN. It passes each character into
+    # the RNN, gets an output h, then runs the next one.
+    for step in range(history_length):
+      # The RNN takes in 
+      next_state = self.rnn_model(data[:, step, :], state)
+      # if isinstance(next_state, tuple):
+      #   h, c = next_state
+      #   output_hs.append(h)
+      # else:
+      #   output_hs.append(next_state)
+      state = next_state     
+    
+    logits = self.classifier(state)
     return logits, state
 
   def reset_parameters(self):
