@@ -78,6 +78,10 @@ class SentimentClassification(nn.Module):
 
     state = None
     batch_size, total_steps, _ = data.shape
+
+    # RNNs output h's, which can be passed through a linear
+    # classifier to determine a output vector that can contain a probability
+    # for each word. Since each h determines each character, we store them
     full_outputs = []
     for step in range(total_steps):
       next_state = self.rnn_model(data[:, step, :], state)
