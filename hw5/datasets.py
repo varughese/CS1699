@@ -106,10 +106,14 @@ class ShakespeareDataset(Dataset):
     with open(txt_path, 'rb') as fp:
       raw_text = fp.read().strip().decode(encoding='utf-8')
 
+    # Vocab is just a list of words
     self.vocab = sorted(set(raw_text))
+    # a -> 1, b -> 2, .. etc
     self.char2index = {x: i for (i, x) in enumerate(self.vocab)}
+    # 1 -> a, 2 -> b, .. etc
     self.index2char = {i: x for (i, x) in enumerate(self.vocab)}
 
+    # data is history_length of chars -> next character
     self.data = [(raw_text[i:i + history_length], raw_text[i + history_length])
                  for i in range(len(raw_text) - history_length)]
     return
@@ -118,6 +122,7 @@ class ShakespeareDataset(Dataset):
     return len(self.data)
 
   def __getitem__(self, index):
+    # data contains characters, this converts it to number
     history, label = self.data[index]
     history = np.array([self.char2index[x] for x in history])
     label = self.char2index[label]

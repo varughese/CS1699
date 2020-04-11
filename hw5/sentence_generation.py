@@ -64,10 +64,22 @@ class SentenceGeneration(nn.Module):
     self.hidden_size = hidden_size
     self.bias = bias
 
-    #####################################################################
-    # Implement here following the given signature                      #
-    raise NotImplementedError
-    #####################################################################
+    # embedding is just a way to convert an input that represents a word, to 
+    # another set of vectors. This makes it so the vectors in the embedding layer
+    # can learn special things about the words
+    # https://pytorch.org/tutorials/beginner/nlp/word_embeddings_tutorial.html
+    # An "embedding" is a a vector that represents this, and we will have one
+    # for every word. THen, this layer essential
+    # padding_idx just sets the vector in the embedding that will be all 0s
+    self.embedding = nn.Embedding(num_embeddings=vocabulary_size,
+                                  embedding_dim=embedding_dim,
+                                  padding_idx=PADDING_TOKEN)
+    
+    # our RNNs takes the embedddings as input
+    self.rnn_model = self.rnn_module(input_size=embedding_dim,
+                                    hidden_size=hidden_size,
+                                    bias=bias)
+    # TODO - what does this output?
 
     return
 
@@ -90,10 +102,11 @@ class SentenceGeneration(nn.Module):
       logits: Predicted logits (before softmax) over vocabulary.
       state: Current state, useful for continuous inference.
     """
-    #####################################################################
-    # Implement here following the given signature                      #
-    raise NotImplementedError
-    # Placeholder, you need to override these two variables.
+
+    # Logits are just the scores before the softmax is applied
+    # PyTorch is smart enough to know how to apply the softmax afterwards
+    # https://miro.medium.com/max/1400/1*670CdxchunD-yAuUWdI7Bw.png
+
     logits, state = None, None
     #####################################################################
     return logits, state
