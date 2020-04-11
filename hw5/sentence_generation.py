@@ -39,6 +39,8 @@ flags.DEFINE_string('start_string', 'R', 'Start string for generation.')
 flags.DEFINE_enum('task_type', 'training', ['training', 'generation'],
                   'Specifies the type of the task.')
 
+flags.DEFINE_string('text_path', 'data/shakespeare.txt', 'Path to the text file to train on')
+
 PADDING_TOKEN = 0
 
 RNN_MODULES = {
@@ -140,7 +142,7 @@ class SentenceGeneration(nn.Module):
 
 
 def shakespeare_trainer():
-  train_dataset = ShakespeareDataset(txt_path='data/shakespeare.txt',
+  train_dataset = ShakespeareDataset(txt_path=FLAGS.text_path,
                                      history_length=FLAGS.history_length)
   train_loader = DataLoader(train_dataset,
                             batch_size=FLAGS.batch_size,
