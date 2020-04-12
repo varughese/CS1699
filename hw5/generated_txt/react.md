@@ -74,7 +74,7 @@ python sentence_generation.py --start_string="import React from" --model_checkpo
 ```
 
 ----
-```
+```js
 import React from
  'react-devtools-shared/src/val306.5${prefioid`, anyout needed value);
   ReactFabric.render(
