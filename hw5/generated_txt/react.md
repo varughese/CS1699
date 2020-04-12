@@ -66,6 +66,8 @@ jo: 'UpdateFiberInstance font or opd.",
  */
 ```
 
+## Epoch 9 Results
+It did not get that much better after 9 epochs.
 
 Generating 10000 characters from ./experiments/react_js_sentences_test_emb_60.h_200/model_epoch_9.pt
 
