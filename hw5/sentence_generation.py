@@ -260,6 +260,7 @@ def shakespeare_writer():
     logits, _ = model(inputs)
     chosen_char = sample_next_char_id(logits)
     inputs = torch.cat((inputs, chosen_char.view(1, -1)), 1)
+    inputs = inputs[0,-100:].view(1, -1) # Only get the last 100
     char_ascii = index2char[chosen_char.item()]
     print(char_ascii, end='')
     generated_chars.append(char_ascii)
