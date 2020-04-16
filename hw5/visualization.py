@@ -160,16 +160,32 @@ def visualize_internals(sequence_id,
   plt.savefig(
       os.path.join(saving_dir,
                    'S%02d_' % sequence_id + gate_name.lower() + '.png'))
+  plt.close()
   return
+
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
+model_checkpoint_path = 'data/war_and_peace_model_checkpoint.pt'
+loaded_model_checkpoint = torch.load(model_checkpoint_path, map_location=torch.device('cpu'))
+vocab = loaded_model_checkpoint['vocabulary']
+model_checkpoint = loaded_model_checkpoint['model']
 
 
 def war_and_peace_visualizer():
-  #####################################################################
-  # Implement here following the given signature                      #
-  raise NotImplementedError
-  #####################################################################
-
-  return
+  dataset = VisualizeWarAndPeaceDataset(vocab)
+  data_loader = DataLoader(dataset,
+                          batch_size=1,
+                          shuffle=True,
+                          num_workers=8)
+  model = VisualizeInternalGates()
+  model.load_state_dict(model_checkpoint)
+  model.eval()
+  for step, (sequences, labels) in enumerate(data_loader):
+    total_step = len(data_loader) + step
+    sequences = sequences.to(device)
+    logits, gates = model(sequences)
+    for gate_name in gates.keys():
+      visualize_internals(step, dataset.convert_to_chars(sequences), gate_name, gates[gate_name])
 
 
 def main(unused_argvs):
