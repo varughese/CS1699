@@ -10,20 +10,52 @@ import torch.nn as nn
 import torch.nn.functional as F
 from absl import app
 from torch.utils.data import DataLoader, Dataset
+from datasets import IMDBReviewDataset, imdb_collate_fn
 
+############
+
+# Since we are running the script sort of ad-hoc, update parameters
+# here
+
+current_rnn_model_to_viz = 'coupled'
 PADDING_TOKEN = 0
-CKPT_VOCABULARY_SIZE = 82
-CKPT_EMBEDDING_DIM = 256
-CKPT_HIDDEN_SIZE = 128
 
+if current_rnn_model_to_viz == 'gru':
+  CKPT_VOCABULARY_SIZE = 82
+  CKPT_EMBEDDING_DIM = 256
+  CKPT_HIDDEN_SIZE = 128
+  model_checkpoint_path = 'data/war_and_peace_model_checkpoint.pt'
+  loaded_model_checkpoint = torch.load(model_checkpoint_path, map_location=torch.device('cpu'))
+  vocab = loaded_model_checkpoint['vocabulary']
+  model_checkpoint = loaded_model_checkpoint['model']
+  dataset = VisualizeWarAndPeaceDataset(vocab)
+else:
+  dataset = IMDBReviewDataset(csv_path='data/imdb_train.csv',
+                                  vocab_min_count=100,
+                                  vocab_max_size=20000,
+                                  review_max_length=200)
+  vocab = dataset.get_vocabulary()
+  CKPT_VOCABULARY_SIZE = len(vocab)
+  CKPT_EMBEDDING_DIM = 128
+  CKPT_HIDDEN_SIZE = 100
+  model_checkpoint_path = 'experiments/{}1_emb_128.h_100/best_model.pt'.format(current_rnn_model_to_viz)
+  model_checkpoint = torch.load(model_checkpoint_path, map_location=torch.device('cpu'))
+
+
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
+
+##############
 
 class VisualizeInternalGates(nn.Module):
 
-  def __init__(self):
+  def __init__(self, rnn_module):
     super().__init__()
     vocabulary_size = CKPT_VOCABULARY_SIZE
     embedding_dim = CKPT_EMBEDDING_DIM
     hidden_size = CKPT_HIDDEN_SIZE
+
+    self.rnn_module = rnn_module
 
     self.embedding = nn.Embedding(num_embeddings=vocabulary_size,
                                   embedding_dim=embedding_dim,
@@ -47,10 +79,61 @@ class VisualizeInternalGates(nn.Module):
     logits = self.classifier(state)
 
     internals = list(zip(*internals))
+
+    if (len(internals) == 3):
+      outputs = {
+          'update_signals': internals[0],
+          'reset_signals': internals[1],
+          'cell_state_candidates': internals[2],
+      }
+    else: # (C, f_t, i_t, o_t)
+      outputs = {
+        'cell_state_candidates': internals[0],
+        'forget_signals': internals[1],
+        'input_signals': internals[2],
+        'output_signals': internals[3]
+      }
+    return logits, outputs
+
+class VisualizeInternalGatesSentimentClassificaton(nn.Module):
+
+  def __init__(self, rnn_module):
+    super().__init__()
+    vocabulary_size = CKPT_VOCABULARY_SIZE
+    embedding_dim = CKPT_EMBEDDING_DIM
+    hidden_size = CKPT_HIDDEN_SIZE
+    self.bias = True
+
+    self.rnn_module = rnn_module
+
+    self.embedding = nn.Embedding(num_embeddings=vocabulary_size,
+                                  embedding_dim=embedding_dim,
+                                  padding_idx=PADDING_TOKEN)
+    self.rnn_model = self.rnn_module(input_size=embedding_dim,
+                                      hidden_size=hidden_size)
+    self.classifier = nn.Linear(hidden_size, 2)
+    return
+
+  def forward(self, batch_reviews):
+    data = self.embedding(batch_reviews)
+
+    state = None
+    batch_size, total_steps, _ = data.shape
+    internals = []
+    for step in range(total_steps):
+      next_h, gate_signals = self.rnn_model(data[:, step, :], state)
+      internals.append(gate_signals)
+      state = next_h
+
+    logits = self.classifier(state)
+
+    internals = list(zip(*internals))
+
     outputs = {
-        'update_signals': internals[0],
-        'reset_signals': internals[1],
-        'cell_state_candidates': internals[2],
+      'cell_state_candidates': internals[0],
+      'forget_signals': internals[1],
+      'input_signals': internals[2],
+      'output_signals': internals[3]
     }
     return logits, outputs
 
@@ -90,10 +173,152 @@ class VisualizeGRUCell(nn.Module):
         param.uniform_(-sqrt_k, sqrt_k)
     return
 
-  def extra_repr(self):
-    return 'input_size={}, hidden_size={}'.format(self.input_size,
-                                                  self.hidden_size)
+class VisualizeLSTMCell(nn.Module):
 
+  def __init__(self, input_size, hidden_size, bias=False):
+    super().__init__()
+    self.input_size = input_size
+    self.hidden_size = hidden_size
+    self.bias = bias
+    self.W_f = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))  
+    self.W_i = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    self.W_o = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    self.W_c = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+
+    self.b_f = nn.Parameter(torch.Tensor(hidden_size))
+    self.b_i = nn.Parameter(torch.Tensor(hidden_size))
+    self.b_o = nn.Parameter(torch.Tensor(hidden_size))
+    self.b_c = nn.Parameter(torch.Tensor(hidden_size))
+    self.reset_parameters()
+
+  def forward(self, x, prev_state):
+    if prev_state is None:
+      batch = x.shape[0]
+      prev_h = torch.zeros((batch, self.hidden_size), device=x.device)
+      prev_c = torch.zeros((batch, self.hidden_size), device=x.device)
+    else:
+      prev_h = prev_state[0]
+      prev_c = prev_state[1]
+
+  
+    concat_hx = torch.cat((prev_h, x), dim=1)
+    f_t = torch.sigmoid(F.linear(concat_hx, self.W_f, self.b_f))
+    i_t = torch.sigmoid(F.linear(concat_hx, self.W_i, self.b_i))
+    C_tilde = torch.tanh(F.linear(concat_hx, self.W_c, self.b_c))
+    o_t = torch.sigmoid(F.linear(concat_hx, self.W_o, self.b_o))
+    
+    C = f_t * prev_c + i_t * C_tilde
+    h = o_t * torch.tanh(C)
+    return h, (C, f_t, i_t, o_t)
+
+  def reset_parameters(self):
+    sqrt_k = (1. / self.hidden_size)**0.5
+    with torch.no_grad():
+      for param in self.parameters():
+        param.uniform_(-sqrt_k, sqrt_k)
+    return
+
+class VisualizePeepholedLSTMCell(nn.Module):
+
+  def __init__(self, input_size, hidden_size, bias=False):
+    super().__init__()
+
+    self.input_size = input_size
+    self.hidden_size = hidden_size
+  
+  
+  
+    cell_state_size = hidden_size 
+    self.bias = bias
+
+    self.W_f = nn.Parameter(torch.Tensor(hidden_size, cell_state_size + hidden_size + input_size))
+    self.W_i = nn.Parameter(torch.Tensor(hidden_size, cell_state_size + hidden_size + input_size))
+    self.W_o = nn.Parameter(torch.Tensor(hidden_size, cell_state_size + hidden_size + input_size))
+    self.W_c = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+
+    self.b_f = nn.Parameter(torch.Tensor(hidden_size))
+    self.b_i = nn.Parameter(torch.Tensor(hidden_size))
+    self.b_o = nn.Parameter(torch.Tensor(hidden_size))
+    self.b_c = nn.Parameter(torch.Tensor(hidden_size))
+    return
+
+  def forward(self, x, prev_state):
+    if prev_state is None:
+      batch = x.shape[0]
+      prev_h = torch.zeros((batch, self.hidden_size), device=x.device)
+      prev_c = torch.zeros((batch, self.hidden_size), device=x.device)
+    else:
+      prev_h = prev_state[0]
+      prev_c = prev_state[1]
+
+  
+    concat_hx = torch.cat((prev_h, x), dim=1)
+  
+    concat_chx = torch.cat((prev_c, prev_h, x), dim=1)
+
+  
+  
+    f_t = torch.sigmoid(F.linear(concat_chx, self.W_f, self.b_f))
+    i_t = torch.sigmoid(F.linear(concat_chx, self.W_i, self.b_i))
+    C_tilde = torch.tanh(F.linear(concat_hx, self.W_c, self.b_c))
+    o_t = torch.sigmoid(F.linear(concat_chx, self.W_o, self.b_o))
+    
+    C = f_t * prev_c + i_t * C_tilde
+    h = o_t * torch.tanh(C)
+    return h, (C, f_t, i_t, o_t)
+
+  def reset_parameters(self):
+    sqrt_k = (1. / self.hidden_size)**0.5
+    with torch.no_grad():
+      for param in self.parameters():
+        param.uniform_(-sqrt_k, sqrt_k)
+    return
+
+class VisualizeCoupledLSTMCell(nn.Module):
+
+  def __init__(self, input_size, hidden_size, bias=False):
+    super().__init__()
+
+    self.input_size = input_size
+    self.hidden_size = hidden_size
+    self.bias = bias
+    
+    self.W_f = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+  
+
+    self.W_o = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+    self.W_c = nn.Parameter(torch.Tensor(hidden_size, hidden_size + input_size))
+
+    self.b_f = nn.Parameter(torch.Tensor(hidden_size))
+    self.b_o = nn.Parameter(torch.Tensor(hidden_size))
+    self.b_c = nn.Parameter(torch.Tensor(hidden_size))
+    self.reset_parameters()
+
+  def forward(self, x, prev_state):
+    if prev_state is None:
+      batch = x.shape[0]
+      prev_h = torch.zeros((batch, self.hidden_size), device=x.device)
+      prev_c = torch.zeros((batch, self.hidden_size), device=x.device)
+    else:
+      prev_h = prev_state[0]
+      prev_c = prev_state[1]
+
+    concat_hx = torch.cat((prev_h, x), dim=1)
+    f_t = torch.sigmoid(F.linear(concat_hx, self.W_f, self.b_f))
+    i_t = 1 - f_t
+    C_tilde = torch.tanh(F.linear(concat_hx, self.W_c, self.b_c))
+    o_t = torch.sigmoid(F.linear(concat_hx, self.W_o, self.b_o))
+    
+    C = f_t * prev_c + i_t * C_tilde
+    h = o_t * torch.tanh(C)
+    return h, (C, f_t, i_t, o_t)
+
+  def reset_parameters(self):
+    sqrt_k = (1. / self.hidden_size)**0.5
+    with torch.no_grad():
+      for param in self.parameters():
+        param.uniform_(-sqrt_k, sqrt_k)
+    return
 
 class VisualizeWarAndPeaceDataset(Dataset):
 
@@ -137,7 +362,10 @@ def visualize_internals(sequence_id,
   elif gate_name == 'cell_state_candidates':
     vmin = -1
   else:
-    raise ValueError
+    vmin = 0
+
+  for tick in ax.get_xticklabels():
+    tick.set_rotation(80)
 
   sns.heatmap(states,
               cbar=False,
@@ -153,7 +381,9 @@ def visualize_internals(sequence_id,
   plt.xlabel('Sequence')
   plt.ylabel('Hidden Cells')
 
+  locs, labels = plt.xticks()
   ax.xaxis.set_ticks_position('top')
+  ax.xaxis.set_ticklabels(labels, rotation=90)
 
   plt.tight_layout()
   os.makedirs(saving_dir, exist_ok=True)
@@ -163,24 +393,48 @@ def visualize_internals(sequence_id,
   plt.close()
   return
 
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-model_checkpoint_path = 'data/war_and_peace_model_checkpoint.pt'
-loaded_model_checkpoint = torch.load(model_checkpoint_path, map_location=torch.device('cpu'))
-vocab = loaded_model_checkpoint['vocabulary']
-model_checkpoint = loaded_model_checkpoint['model']
+RNN_MODULES = {
+    'gru': VisualizeGRUCell,
+    'lstm': VisualizeLSTMCell,
+    'peephole': VisualizePeepholedLSTMCell,
+    'coupled': VisualizeCoupledLSTMCell
+}
+
+
+def imdb_visualizer():
+  # Wasnt sure if you wanted us to keep this one function so I 
+  # put the code in here
+  data_loader = DataLoader(dataset,
+                        batch_size=1,
+                        shuffle=False,
+                        num_workers=8,
+                        collate_fn=imdb_collate_fn)
+  model = VisualizeInternalGatesSentimentClassificaton(RNN_MODULES[current_rnn_model_to_viz])
+  model.load_state_dict(model_checkpoint)
+  sequence, _ = dataset[0]
+  sentence = [dataset.index2word.get(w, dataset.oov_token_id) for w in sequence]
+  _, gates = model(torch.LongTensor(sequence).view(-1, 1))
+  for gate_name in gates.keys():
+    visualize_internals(0, sentence, gate_name, gates[gate_name])
+
 
 
 def war_and_peace_visualizer():
-  dataset = VisualizeWarAndPeaceDataset(vocab)
-  data_loader = DataLoader(dataset,
-                          batch_size=1,
-                          shuffle=True,
-                          num_workers=8)
-  model = VisualizeInternalGates()
+  if current_rnn_model_to_viz == 'gru':
+    data_loader = DataLoader(dataset,
+                            batch_size=1,
+                            shuffle=True,
+                            num_workers=8)
+  else:
+    imdb_visualizer()
+    return
+
+  model = VisualizeInternalGates(RNN_MODULES[current_rnn_model_to_viz])
   model.load_state_dict(model_checkpoint)
   model.eval()
-  for step, (sequences, labels) in enumerate(data_loader):
+  for step, data in enumerate(data_loader):
+    sequences = data[0]
     total_step = len(data_loader) + step
     sequences = sequences.to(device)
     logits, gates = model(sequences)
